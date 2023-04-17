@@ -1,6 +1,6 @@
 package dev.dicesystems.varsitutor.data.remote.responses
 
 data class Vacancy(
-    val vacancies: List<VacancyX>,
+    val data: List<VacancyX>,
     val meta: Meta
 )

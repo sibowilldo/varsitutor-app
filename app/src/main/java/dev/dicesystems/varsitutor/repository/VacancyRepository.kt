@@ -17,8 +17,10 @@ class VacancyRepository @Inject constructor(
         val response = try {
             api.getVacancyList(page)
         }catch(e: Exception){
+            Log.d("MY-TAG", "Repo ${e.message}")
             return Resource.Error("Oops! Could not load Vacancies ${e.message}")
         }
+
         return Resource.Success(data = response)
     }
 
@@ -26,6 +28,7 @@ class VacancyRepository @Inject constructor(
         val response = try {
             api.getVacancy(id)
         }catch(e: Exception){
+            Log.d("MY-TAG", "Repo ${e.message}")
             return Resource.Error("Oops! Could find requested Vacancy")
         }
         return Resource.Success(data = response)

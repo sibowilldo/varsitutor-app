@@ -1,23 +1,18 @@
 package dev.dicesystems.varsitutor.viewmodels
 
-import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import coil.compose.AsyncImagePainter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.dicesystems.varsitutor.data.models.VacancyModel
-import dev.dicesystems.varsitutor.data.remote.responses.CreatedAt
-import dev.dicesystems.varsitutor.data.remote.responses.ExpiresAt
 import dev.dicesystems.varsitutor.repository.VacancyRepository
-import dev.dicesystems.varsitutor.screen.VacancyItem
 import dev.dicesystems.varsitutor.util.Resource
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class VacancyListViewModel @Inject constructor(
-private val repository: VacancyRepository
+    private val repository: VacancyRepository
 ) : ViewModel() {
 
     private var currentPage = 1
@@ -31,13 +26,15 @@ private val repository: VacancyRepository
         loadVacancyPaginatedList()
     }
 
-    fun loadVacancyPaginatedList(){
+    fun loadVacancyPaginatedList() {
         viewModelScope.launch {
+
             isLoading.value = true
-            when(val results = repository.getVacancyList(currentPage)){
+            when (val results = repository.getVacancyList(currentPage)) {
                 is Resource.Success -> {
+
                     endReached.value = currentPage >= 5// results.data!!.meta?.last_page!!
-                    val vacancyEntries = results.data!!.vacancies.mapIndexed{ _, entry ->
+                    val vacancyEntries = results.data!!.data.mapIndexed { _, entry ->
                         VacancyModel(
                             category = entry.category,
                             created_at = entry.created_at,
@@ -59,10 +56,12 @@ private val repository: VacancyRepository
                     isLoading.value = false
                     vacancyList.value += vacancyEntries
                 }
+
                 is Resource.Error -> {
                     loadError.value = results.message!!
                     isLoading.value = false
                 }
+
                 else -> {
 
                 }
