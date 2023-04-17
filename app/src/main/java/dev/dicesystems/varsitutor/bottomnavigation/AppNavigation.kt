@@ -35,10 +35,12 @@ import androidx.navigation.compose.rememberNavController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BottomNavigation() {
+fun AppNavigation() {
     val navController = rememberNavController()
-    
     Scaffold(
+        topBar = {
+
+        },
         bottomBar = { BottomBar(navHostController = navController) }
     ) {
         Column(modifier = Modifier.padding(it)) {
@@ -119,10 +121,4 @@ fun RowScope.AddItem(
             }
         }
     }
-}
-
-@Preview
-@Composable
-fun BottomNavPreview() {
-    BottomNavigation()
 }

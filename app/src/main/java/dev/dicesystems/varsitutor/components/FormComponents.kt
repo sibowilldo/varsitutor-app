@@ -69,7 +69,7 @@ fun DefaultButton(
     contentPadding: PaddingValues = PaddingValues(vertical = 16.dp, horizontal = 8.dp)
 ) {
     Button(
-        onClick = { /*TODO*/ },
+        onClick = onClick,
         modifier = modifier.fillMaxWidth(),
         enabled = enabled,
         colors = colors,

@@ -1,6 +1,5 @@
 package dev.dicesystems.varsitutor.screen
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,18 +11,18 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavController
 import dev.dicesystems.varsitutor.components.CustomTopAppBar
+import dev.dicesystems.varsitutor.data.models.VacancyModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfileScreen(navController: NavController){
+fun VacancyShowScreen(navController: NavController, vacancy: VacancyModel? = null){
     Scaffold(
         topBar = {
             CustomTopAppBar(
                 navController = navController,
-                title = "Profile",
+                title = "Vacancy Title Goes Right Here!",
                 showBackIcon = true
             )
         },
@@ -34,7 +33,7 @@ fun ProfileScreen(navController: NavController){
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                Text(text = "Profile Screen")
+                Text(text = "Vacancy Show")
             }
         }
     }

@@ -41,6 +41,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import dev.dicesystems.varsitutor.bottomnavigation.AppNavigation
 import dev.dicesystems.varsitutor.components.AppVersion
 import dev.dicesystems.varsitutor.components.DefaultButton
 import dev.dicesystems.varsitutor.components.InputField
@@ -147,14 +148,21 @@ fun CreateLoginScreen() {
                     )
                 })
             Spacer(modifier = Modifier.size(32.dp))
-            DefaultButton(onClick = { /*TODO*/ },
+            val context = LocalContext.current
+            DefaultButton(
+                onClick =
+                {
+                    login(true)
+                    context.startActivity(Intent(context, MainActivity::class.java))
+                },
                 buttonText = "Sign In",
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor= Color(0xFFB3E5FC),
+                    containerColor = Color(0xFFB3E5FC),
                     contentColor = Color(0xFF000000),
                     disabledContainerColor = Color(rgb(236, 239, 241)),
-                    disabledContentColor = Color(0xFF000000)),
+                    disabledContentColor = Color(0xFF000000)
+                ),
             )
             Row(
                 modifier = Modifier
@@ -167,7 +175,6 @@ fun CreateLoginScreen() {
                         style = MaterialTheme.typography.bodyMedium)
                 }
 
-                val context = LocalContext.current
                 TextButton(onClick = {
                     context.startActivity(Intent(context, RegisterActivity::class.java))
                 }) {
