@@ -8,6 +8,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
@@ -53,6 +54,7 @@ fun HomeTabBar(navController: NavController) {
             selectedTabIndex = pagerState.currentPage,
             indicator = indicator
         ) {
+
             pages.forEachIndexed { index, title ->
                 Tab(
                     modifier = Modifier.zIndex(6f),
@@ -64,6 +66,7 @@ fun HomeTabBar(navController: NavController) {
         }
 
         HorizontalPager(
+            contentPadding = PaddingValues(top = 30.dp),
             modifier = Modifier.fillMaxSize(),
             count = pages.size,
             state = pagerState,

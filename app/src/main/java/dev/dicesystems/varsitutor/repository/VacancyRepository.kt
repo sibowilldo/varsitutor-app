@@ -1,6 +1,5 @@
 package dev.dicesystems.varsitutor.repository
 
-import android.util.Log
 import dagger.hilt.android.scopes.ActivityScoped
 import dev.dicesystems.varsitutor.data.remote.ApiServiceInterface
 import dev.dicesystems.varsitutor.data.remote.responses.Vacancy
@@ -17,7 +16,6 @@ class VacancyRepository @Inject constructor(
         val response = try {
             api.getVacancyList(page)
         }catch(e: Exception){
-            Log.d("MY-TAG", "Repo ${e.message}")
             return Resource.Error("Oops! Could not load Vacancies ${e.message}")
         }
 
@@ -28,7 +26,6 @@ class VacancyRepository @Inject constructor(
         val response = try {
             api.getVacancy(id)
         }catch(e: Exception){
-            Log.d("MY-TAG", "Repo ${e.message}")
             return Resource.Error("Oops! Could find requested Vacancy")
         }
         return Resource.Success(data = response)

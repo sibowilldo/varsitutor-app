@@ -25,6 +25,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -86,14 +87,15 @@ fun StudentHomeScreen(
         SearchBar(modifier = Modifier.padding(vertical = 24.dp))
         Column(
             modifier = Modifier
-                .padding(vertical = 24.dp)
+                .padding(top = 18.dp, bottom = 8.dp)
                 .fillMaxWidth(),
             verticalArrangement = Arrangement.Bottom,
             horizontalAlignment = Alignment.Start
         ) {
             Text(
                 text = "Vacancies",
-                style = MaterialTheme.typography.headlineMedium,
+                style = MaterialTheme.typography.headlineLarge,
+                fontWeight = FontWeight.Light,
                 textAlign = TextAlign.Left
             )
         }
@@ -154,8 +156,19 @@ fun VacancyList(
     val loadError by remember { viewModel.loadError }
     val isLoading by remember { viewModel.isLoading }
 
-    LazyColumn(modifier = modifier, contentPadding = PaddingValues(top = 20.dp)) {
+    if(isLoading){
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(16.dp)) {
+            Text(text = "Waiting for Vacancies...",
+                textAlign = TextAlign.Center)
+            LinearProgressIndicator()
+        }
+    }
+
+    LazyColumn(modifier = modifier, contentPadding = PaddingValues(top = 0.dp)) {
         val itemsCount = vacancyList.size
+
         items(itemsCount) {
             if (it >= itemsCount - 1 && !endReached) {
                 viewModel.loadVacancyPaginatedList()
