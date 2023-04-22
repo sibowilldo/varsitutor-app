@@ -8,7 +8,7 @@ data class VacancyX(
     val expires_at: ExpiresAt,
     val id: Int,
     val location: String,
-    val short_description: Int,
+    val short_description: String,
     val status: String,
     val title: String,
     val type: String,
