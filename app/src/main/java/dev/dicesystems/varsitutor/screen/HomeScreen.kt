@@ -16,17 +16,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Circle
-import androidx.compose.material.icons.rounded.Favorite
 import androidx.compose.material.icons.rounded.FavoriteBorder
-import androidx.compose.material.icons.rounded.FilterNone
-import androidx.compose.material.icons.rounded.Folder
-import androidx.compose.material.icons.rounded.MoreTime
-import androidx.compose.material.icons.rounded.Timer
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -42,7 +35,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -53,10 +45,8 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import dev.dicesystems.varsitutor.bottomnavigation.Screens
-import dev.dicesystems.varsitutor.components.CustomTopAppBar
 import dev.dicesystems.varsitutor.components.HomeTabBar
 import dev.dicesystems.varsitutor.components.SearchBar
-import dev.dicesystems.varsitutor.components.TextWithIcon
 import dev.dicesystems.varsitutor.data.models.VacancyModel
 import dev.dicesystems.varsitutor.viewmodels.VacancyListViewModel
 
@@ -66,7 +56,7 @@ import dev.dicesystems.varsitutor.viewmodels.VacancyListViewModel
 fun HomeScreen(navController: NavController) {
     Scaffold(
         topBar = {
-            Column(modifier = Modifier.padding(24.dp)){
+            Column(modifier = Modifier.padding(24.dp)) {
                 SearchBar(modifier = Modifier.padding(vertical = 24.dp))
                 Column(
                     modifier = Modifier
@@ -86,8 +76,10 @@ fun HomeScreen(navController: NavController) {
 
         },
     ) {
-        Column(modifier = Modifier
-            .padding(it)) {
+        Column(
+            modifier = Modifier
+                .padding(it)
+        ) {
             StudentHomeScreen(navController = navController)
         }
     }
@@ -138,11 +130,16 @@ fun PreviewScreen() {
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.fillMaxWidth()
         ) {
+
             Card(
                 colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.background.copy(red = 0.95f),
+                    containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.1f),
                 ),
-                modifier = Modifier.height(80.dp)
+                modifier = Modifier
+                    .height(120.dp)
+                    .padding(bottom = 25.dp)
+                    .clickable {
+                    }
             )
             {
                 Row(
@@ -158,59 +155,75 @@ fun PreviewScreen() {
                         modifier = Modifier
                             .background(
                                 shape = RoundedCornerShape(10.dp),
-                                color = MaterialTheme.colorScheme.surface
+                                color = MaterialTheme.colorScheme.background
                             )
                             .size(60.dp)
                     ) {
                         Text(text = "🧑‍💻", fontSize = 22.sp)
                     }
-                    Column(modifier = Modifier
-                        .weight(4F)
-                        .fillMaxWidth()) {
-                        Text(
-                            text = "Vacancy Title",
-                            modifier = Modifier,
-                            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Black)
-                        )
-                        Text(
-                            text = "Department",
-                            modifier = Modifier,
-                            style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold)
-                        )
+                    Column(
+                        verticalArrangement = Arrangement.SpaceEvenly,
+                        modifier = Modifier
+                            .weight(4F)
+                            .fillMaxSize()
+                    ) {
+                        Column {
+                            Text(
+                                text = "vacancy.title",
+                                modifier = Modifier,
+                                overflow = TextOverflow.Ellipsis,
+                                maxLines = 1,
+                                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Black)
+                            )
+                            Text(
+                                text = "vacancy.department",
+                                modifier = Modifier,
+                                overflow = TextOverflow.Ellipsis,
+                                maxLines = 1,
+                                style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold)
+                            )
+                        }
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(12.dp)
+                            horizontalArrangement = Arrangement.spacedBy(4.dp)
                         ) {
                             Text(
-                                text = "Category",
+                                text = "vacancy.category",
+                                overflow = TextOverflow.Ellipsis,
+                                maxLines = 1,
                                 style = MaterialTheme.typography.bodySmall.copy(
-                                    fontWeight = FontWeight.Medium,
+                                    fontWeight = FontWeight.SemiBold,
                                     letterSpacing = 0.sp
                                 ),
                                 modifier = Modifier,
-                                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.65f)
+                                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.35f)
                             )
                             Icon(
                                 imageVector = Icons.Rounded.Circle,
                                 contentDescription = "Circle Icon",
-                                modifier = Modifier.size(8.dp)
+                                modifier = Modifier.size(4.dp)
                             )
                             Text(
-                                text = "Location",
+                                text = "vacancy.location",
+                                overflow = TextOverflow.Ellipsis,
+                                maxLines = 1,
                                 style = MaterialTheme.typography.bodySmall.copy(
-                                    fontWeight = FontWeight.Medium,
+                                    fontWeight = FontWeight.SemiBold,
                                     letterSpacing = 0.sp
                                 ),
                                 modifier = Modifier,
-                                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.65f)
+                                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.35f)
                             )
+
                         }
                     }
+
                     Column(
                         modifier = Modifier.fillMaxHeight(),
                         horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.SpaceBetween){
+                        verticalArrangement = Arrangement.SpaceEvenly
+                    ) {
                         val context = LocalContext.current
                         IconButton(
                             modifier = Modifier
@@ -227,16 +240,18 @@ fun PreviewScreen() {
                         }
 
                         Text(
-                            text = "4d ago",
-                            modifier = Modifier,
+                            text = "vacancy.created_at.human",
+                            maxLines = 1,
+                            modifier = Modifier.padding(bottom = 10.dp),
                             style = MaterialTheme.typography.bodySmall.copy(
                                 letterSpacing = 0.sp
                             )
                         )
                     }
-
                 }
             }
+
+
         }
 
     }
@@ -288,118 +303,134 @@ fun VacancyItem(
     modifier: Modifier = Modifier,
     viewModel: VacancyListViewModel = hiltViewModel()
 ) {
-        Card(
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.1f),
-            ),
+    Card(
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.1f),
+        ),
+        modifier = Modifier
+            .height(120.dp)
+            .padding(bottom = 25.dp)
+            .clickable {
+                navController.navigate(
+                    route = Screens.VacancyDetails.withArgs(
+                        vacancy.title,
+                        vacancy.description,
+                        vacancy.department
+                    )
+                )
+            }
+    )
+    {
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-                .height(120.dp)
-                .padding(bottom = 25.dp)
-                .clickable {
-                    navController.navigate(
-                        route = Screens.VacancyDetails.withArgs(
-                            vacancy.title,
-                            vacancy.description
-                        )
-                    )
-                }
-        )
-        {
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-                verticalAlignment = Alignment.CenterVertically,
+                .padding(8.dp)
+                .weight(1F),
+
+            ) {
+            Box(
+                contentAlignment = Alignment.Center,
                 modifier = Modifier
-                    .padding(8.dp)
-                    .weight(1F),
-
-                ) {
-                Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier
-                        .background(
-                            shape = RoundedCornerShape(10.dp),
-                            color = MaterialTheme.colorScheme.background
-                        )
-                        .size(60.dp)
-                ) {
-                    Text(text = "🧑‍💻", fontSize = 22.sp)
-                }
-                Column(
-                    verticalArrangement = Arrangement.SpaceEvenly,
-                    modifier = Modifier
-                        .weight(4F)
-                        .fillMaxSize()) {
-                    Column{
-                        Text(
-                            text = vacancy.title,
-                            modifier = Modifier,
-                            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Black)
-                        )
-                        Text(
-                            text = vacancy.department,
-                            modifier = Modifier,
-                            style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold)
-                        )
-                    }
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(4.dp)
-                    ) {
-                        Text(
-                            text = vacancy.category,
-                            style = MaterialTheme.typography.bodySmall.copy(
-                                fontWeight = FontWeight.SemiBold,
-                                letterSpacing = 0.sp
-                            ),
-                            modifier = Modifier,
-                            color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.35f)
-                        )
-                        Icon(
-                            imageVector = Icons.Rounded.Circle,
-                            contentDescription = "Circle Icon",
-                            modifier = Modifier.size(4.dp)
-                        )
-                        Text(
-                            text = vacancy.location,
-                            style = MaterialTheme.typography.bodySmall.copy(
-                                fontWeight = FontWeight.SemiBold,
-                                letterSpacing = 0.sp
-                            ),
-                            modifier = Modifier,
-                            color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.35f)
-                        )
-
-                    }
-                }
-
-                Column(
-                    modifier = Modifier.fillMaxHeight(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.SpaceEvenly){
-                    val context = LocalContext.current
-                    IconButton(
-                        modifier = Modifier
-                            .size(36.dp)
-                            .weight(1F)
-                            .width(20.dp),
-                        onClick = {
-                            Toast.makeText(context, "Loved it!", Toast.LENGTH_LONG).show()
-                        }) {
-                        Icon(
-                            imageVector = Icons.Rounded.FavoriteBorder,
-                            contentDescription = "Heart Icon"
-                        )
-                    }
-
-                    Text(
-                        text = vacancy.created_at.human,
-                        modifier = Modifier.padding(bottom = 10.dp),
-                        style = MaterialTheme.typography.bodySmall.copy(
-                            letterSpacing = 0.sp
-                        )
+                    .background(
+                        shape = RoundedCornerShape(10.dp),
+                        color = listOf(MaterialTheme.colorScheme.background,
+                            MaterialTheme.colorScheme.primaryContainer,
+                            MaterialTheme.colorScheme.secondaryContainer,
+                            MaterialTheme.colorScheme.tertiaryContainer,
+                            ).random()
                     )
+                    .size(60.dp)
+            ) {
+                Text(text = "🧑‍💻", fontSize = 22.sp)
+            }
+            Column(
+                verticalArrangement = Arrangement.SpaceEvenly,
+                modifier = Modifier
+                    .weight(4F)
+                    .fillMaxSize()
+            ) {
+                Column {
+                    Text(
+                        text = vacancy.title,
+                        modifier = Modifier,
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1,
+                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Black)
+                    )
+                    Text(
+                        text = vacancy.department,
+                        modifier = Modifier,
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1,
+                        style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold)
+                    )
+                }
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    Text(
+                        text = vacancy.category,
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1,
+                        style = MaterialTheme.typography.bodySmall.copy(
+                            fontWeight = FontWeight.SemiBold,
+                            letterSpacing = 0.sp
+                        ),
+                        modifier = Modifier,
+                        color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.35f)
+                    )
+                    Icon(
+                        imageVector = Icons.Rounded.Circle,
+                        contentDescription = "Circle Icon",
+                        modifier = Modifier.size(4.dp)
+                    )
+                    Text(
+                        text = vacancy.location,
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1,
+                        style = MaterialTheme.typography.bodySmall.copy(
+                            fontWeight = FontWeight.SemiBold,
+                            letterSpacing = 0.sp
+                        ),
+                        modifier = Modifier,
+                        color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.35f)
+                    )
+
                 }
             }
+
+            Column(
+                modifier = Modifier.fillMaxHeight(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.SpaceEvenly
+            ) {
+                val context = LocalContext.current
+                IconButton(
+                    modifier = Modifier
+                        .size(36.dp)
+                        .weight(1F)
+                        .width(20.dp),
+                    onClick = {
+                        Toast.makeText(context, "Loved it!", Toast.LENGTH_LONG).show()
+                    }) {
+                    Icon(
+                        imageVector = Icons.Rounded.FavoriteBorder,
+                        contentDescription = "Heart Icon"
+                    )
+                }
+
+                Text(
+                    text = vacancy.created_at.human,
+                    maxLines = 1,
+                    modifier = Modifier.padding(bottom = 10.dp),
+                    style = MaterialTheme.typography.bodySmall.copy(
+                        letterSpacing = 0.sp
+                    )
+                )
+            }
         }
+    }
 }

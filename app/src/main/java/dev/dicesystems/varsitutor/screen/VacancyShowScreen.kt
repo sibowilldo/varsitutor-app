@@ -44,7 +44,8 @@ import dev.dicesystems.varsitutor.components.TextWithIcon
 fun VacancyShowScreen(
     navController: NavController,
     title: String?,
-    description: String?
+    description: String?,
+    department: String?
 ) {
     Scaffold(
         topBar = {
@@ -83,128 +84,7 @@ fun VacancyShowScreen(
                         verticalArrangement = Arrangement.spacedBy(6.dp),
                         modifier = Modifier.padding(vertical = 16.dp)
                     ) {
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(6.dp),
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            Card(
-                                colors = CardDefaults.cardColors(
-                                    containerColor = MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.3f)
-                                ),
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .weight(1F)) {
-                                Row(modifier = Modifier.height(48.dp)) {
-                                    Column(modifier = Modifier.padding(8.dp).weight(3F)) {
-                                        Text(text = "Category")
-                                        Text(text = "Permanent")
-                                    }
-                                    Icon(
-                                        tint = MaterialTheme.colorScheme.primary,
-                                        modifier = Modifier
-                                            .fillMaxHeight()
-                                            .weight(1F)
-                                            .background(color = MaterialTheme.colorScheme.primaryContainer)
-                                            .padding(8.dp),
-                                        imageVector = Icons.Rounded.Folder,
-                                        contentDescription = "Folder Icon"
-                                    )
-                                }
 
-                            }
-                            Card(
-                                colors = CardDefaults.cardColors(
-                                    containerColor = MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.3f)
-                                ),
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .weight(1F)) {
-                                Row(modifier = Modifier.height(48.dp)) {
-                                    Column(modifier = Modifier.padding(8.dp).weight(3F))  {
-                                        Text(text = "Category")
-                                        Text(text = "Permanent")
-                                    }
-                                    Icon(
-                                        tint = MaterialTheme.colorScheme.primary,
-                                        modifier = Modifier
-                                            .fillMaxHeight()
-                                            .background(color = MaterialTheme.colorScheme.primaryContainer)
-                                            .padding(8.dp),
-                                        imageVector = Icons.Rounded.Folder,
-                                        contentDescription = "Folder Icon"
-                                    )
-                                }
-
-                            }
-
-                        }
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(6.dp),
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            Card(modifier = Modifier
-                                .fillMaxWidth()
-                                .weight(1F)) {
-                                Row(modifier = Modifier.height(48.dp)) {
-                                    Column(modifier = Modifier.padding(8.dp)) {
-                                        Text(text = "Category")
-                                        Text(text = "Permanent")
-                                    }
-                                    Icon(
-                                        tint = MaterialTheme.colorScheme.primary,
-                                        modifier = Modifier
-                                            .fillMaxHeight()
-                                            .weight(1F)
-                                            .background(color = MaterialTheme.colorScheme.primaryContainer)
-                                            .padding(8.dp),
-                                        imageVector = Icons.Rounded.Folder,
-                                        contentDescription = "Folder Icon"
-                                    )
-                                }
-
-                            }
-                            Card(modifier = Modifier
-                                .fillMaxWidth()
-                                .weight(1F)) {
-                                Row(modifier = Modifier.height(48.dp)) {
-                                    Column(modifier = Modifier.padding(8.dp)) {
-                                        Text(text = "Category")
-                                        Text(text = "Permanent")
-                                    }
-                                    Icon(
-                                        tint = MaterialTheme.colorScheme.primary,
-                                        modifier = Modifier
-                                            .fillMaxHeight()
-                                            .background(color = MaterialTheme.colorScheme.primaryContainer)
-                                            .padding(8.dp),
-                                        imageVector = Icons.Rounded.Folder,
-                                        contentDescription = "Folder Icon"
-                                    )
-                                }
-
-                            }
-                            Card(modifier = Modifier
-                                .fillMaxWidth()
-                                .weight(1F)) {
-                                Row(modifier = Modifier.height(48.dp)) {
-                                    Column(modifier = Modifier.padding(8.dp)) {
-                                        Text(text = "Category")
-                                        Text(text = "Permanent")
-                                    }
-                                    Icon(
-                                        tint = MaterialTheme.colorScheme.primary,
-                                        modifier = Modifier
-                                            .fillMaxHeight()
-                                            .background(color = MaterialTheme.colorScheme.primaryContainer)
-                                            .padding(8.dp),
-                                        imageVector = Icons.Rounded.Folder,
-                                        contentDescription = "Folder Icon"
-                                    )
-                                }
-
-                            }
-
-                        }
                         TextWithIcon(
                             text = "Category", textColor = Color.LightGray, icon =
                             Icons.Rounded.CalendarToday, iconDescription = ""
@@ -219,7 +99,7 @@ fun VacancyShowScreen(
                             Icons.Rounded.CalendarToday, iconDescription = ""
                         )
                         TextWithIcon(
-                            text = "Department", textColor = Color.LightGray, icon =
+                            text = "$department", textColor = Color.LightGray, icon =
                             Icons.Rounded.CalendarToday, iconDescription = ""
                         )
                         TextWithIcon(

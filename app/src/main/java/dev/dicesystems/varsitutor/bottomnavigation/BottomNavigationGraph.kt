@@ -36,15 +36,19 @@ fun BottomNavigationGraph(
         composable(route = BottomBarScreen.Profile.route){
             ProfileScreen(navController = navigationController)
         }
-        composable(route = Screens.VacancyDetails.route+"/{title}/{description}",
+        composable(route = Screens.VacancyDetails.route+"/{title}/{description}/{department}",
         arguments = listOf(
                 navArgument("title"){},
                 navArgument("description"){},
+                navArgument("department"){},
         )){
             VacancyShowScreen(
                 navController = navigationController,
                 title = it.arguments?.getString("title"),
-                description = it.arguments?.getString("description"))
+                description = it.arguments?.getString("description"),
+                department = it.arguments?.getString("department"),
+
+            )
         }
     }
 }
