@@ -6,6 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import dev.dicesystems.varsitutor.data.models.VacancyModel
 import dev.dicesystems.varsitutor.screen.FavouriteScreen
 import dev.dicesystems.varsitutor.screen.HomeScreen
 import dev.dicesystems.varsitutor.screen.MoreScreen
@@ -35,12 +36,19 @@ fun BottomNavigationGraph(
         composable(route = BottomBarScreen.Profile.route){
             ProfileScreen(navController = navigationController)
         }
-        composable(route = "vacancy_show/{vacancy_title}", arguments = listOf(
-            navArgument("vacancy_title"){
-                type = NavType.StringType
-            }
+        composable(route = Screens.VacancyDetails.route+"/{title}/{description}/{department}",
+        arguments = listOf(
+                navArgument("title"){},
+                navArgument("description"){},
+                navArgument("department"){},
         )){
-            VacancyShowScreen(navController = navigationController)
+            VacancyShowScreen(
+                navController = navigationController,
+                title = it.arguments?.getString("title"),
+                description = it.arguments?.getString("description"),
+                department = it.arguments?.getString("department"),
+
+            )
         }
     }
 }

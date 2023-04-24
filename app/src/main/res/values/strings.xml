@@ -33,4 +33,5 @@
     <string name="heading_sign_in">Sign In</string>
     <string name="heading_getting_an_account">Getting an account</string>
     <string name="heading_fill_in_form_to_get_a_new_account">Fill in this form to get a new account</string>
+    <string name="title_activity_compose">ComposeActivity</string>
 </resources>
