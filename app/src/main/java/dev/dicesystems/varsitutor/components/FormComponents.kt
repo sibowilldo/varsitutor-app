@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun InputField(
     modifier: Modifier = Modifier,
+    placeholder: @Composable() (() -> Unit)? = {},
     valueState: MutableState<String>,
     labelId: String,
     enabled: Boolean = true,
@@ -43,6 +44,7 @@ fun InputField(
     OutlinedTextField(
         value = valueState.value,
         onValueChange = { valueState.value = it },
+        placeholder = placeholder,
         label = { Text(text = labelId) },
         leadingIcon = leadingIcon,
         singleLine = isSingleLine,
