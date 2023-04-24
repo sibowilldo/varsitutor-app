@@ -62,6 +62,7 @@ fun DefaultButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     buttonText: String,
+    textColor: Color = Color.DarkGray,
     enabled: Boolean = true,
     colors: ButtonColors,
     elevation: ButtonElevation = ButtonDefaults.buttonElevation(0.dp),
@@ -78,6 +79,11 @@ fun DefaultButton(
         shape = RoundedCornerShape(18.dp),
         contentPadding = contentPadding
     ) {
-        Text(text = buttonText, style = TextStyle(fontSize = 22.sp, fontWeight = FontWeight.Medium))
+        Text(text = buttonText.uppercase(),
+            color = textColor,
+            style = TextStyle(
+                fontSize = 22.sp,
+                fontWeight = FontWeight.Medium)
+        )
     }
 }

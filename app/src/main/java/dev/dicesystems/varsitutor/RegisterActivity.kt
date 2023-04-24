@@ -5,6 +5,7 @@ import android.graphics.Color.rgb
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,12 +15,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Badge
 import androidx.compose.material.icons.rounded.Email
 import androidx.compose.material.icons.rounded.Password
 import androidx.compose.material.icons.rounded.People
 import androidx.compose.material.icons.rounded.Person2
 import androidx.compose.material.icons.rounded.PhoneAndroid
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -48,191 +51,7 @@ class RegisterActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            RegisterScreen {
-                val mutableGivenName = remember {
-                    mutableStateOf("")
-                }
-                val mutableFamilyName = remember {
-                    mutableStateOf("")
-                }
-                val mutableContactNumber = remember {
-                    mutableStateOf("")
-                }
-                val mutableEmailAddress = remember {
-                    mutableStateOf("")
-                }
-                val mutablePassword = remember {
-                    mutableStateOf("")
-                }
-                val mutableConfirmPassword = remember {
-                    mutableStateOf("")
-                }
-                Column(verticalArrangement = Arrangement.Top) {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(18.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Surface(modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = 16.dp)) {
-                            Text(
-                                "Create an Account",
-                                style = MaterialTheme.typography.headlineMedium,
-                                fontWeight = FontWeight.ExtraBold,
-                                textAlign = TextAlign.Left
-                            )
-                        }
-                        Column(
-                            modifier = Modifier.padding(vertical = 16.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Text(
-                                "Fill in this form to create a new account 👍",
-                                style = MaterialTheme.typography.headlineSmall,
-                                textAlign = TextAlign.Center,
-                            )
-
-                        }
-                        Column(
-                            modifier = Modifier.padding(18.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            InputField(
-                                modifier = Modifier.fillMaxWidth(),
-                                valueState = mutableGivenName,
-                                labelId = "Given Name",
-                                keyboardType = KeyboardType.Text,
-                                imeAction = ImeAction.Next,
-                                leadingIcon = {
-                                    Icon(
-                                        imageVector = Icons.Rounded.Person2,
-                                        contentDescription = "Person Icon"
-                                    )
-                                })
-                            InputField(
-                                modifier = Modifier.fillMaxWidth(),
-                                valueState = mutableFamilyName,
-                                labelId = "Family Name",
-                                keyboardType = KeyboardType.Text,
-                                imeAction = ImeAction.Next,
-                                leadingIcon = {
-                                    Icon(
-                                        imageVector = Icons.Rounded.People,
-                                        contentDescription = "People Icon"
-                                    )
-                                })
-                            InputField(
-                                modifier = Modifier.fillMaxWidth(),
-                                valueState = mutableContactNumber,
-                                labelId = "Contact Number",
-                                keyboardType = KeyboardType.Phone,
-                                imeAction = ImeAction.Next,
-                                leadingIcon = {
-                                    Icon(
-                                        imageVector = Icons.Rounded.PhoneAndroid,
-                                        contentDescription = "Phone Icon"
-                                    )
-                                })
-                            InputField(
-                                modifier = Modifier.fillMaxWidth(),
-                                valueState = mutableEmailAddress,
-                                labelId = "Email Address",
-                                keyboardType = KeyboardType.Text,
-                                imeAction = ImeAction.Next,
-                                leadingIcon = {
-                                    Icon(
-                                        imageVector = Icons.Rounded.Email,
-                                        contentDescription = "Email Icon"
-                                    )
-                                })
-                            InputField(
-                                modifier = Modifier.fillMaxWidth(),
-                                valueState = mutablePassword,
-                                labelId = "Password",
-                                keyboardType = KeyboardType.Password,
-                                visualTransformation = PasswordVisualTransformation(),
-                                leadingIcon = {
-                                    Icon(
-                                        imageVector = Icons.Rounded.Password,
-                                        contentDescription = "Password Icon"
-                                    )
-                                })
-                            InputField(
-                                modifier = Modifier.fillMaxWidth(),
-                                valueState = mutableConfirmPassword,
-                                labelId = "Confirm Password",
-                                keyboardType = KeyboardType.Password,
-                                visualTransformation = PasswordVisualTransformation(),
-                                leadingIcon = {
-                                    Icon(
-                                        imageVector = Icons.Rounded.Password,
-                                        contentDescription = "Password Icon"
-                                    )
-                                })
-                            Spacer(modifier = Modifier.size(32.dp))
-                            DefaultButton(
-                                onClick = { /*TODO*/ },
-                                buttonText = "Sign Up",
-                                modifier = Modifier.fillMaxWidth(),
-                                colors = ButtonDefaults.buttonColors(
-                                    containerColor = Color(rgb(200, 230, 201)),
-                                    contentColor = Color(0xFF000000),
-                                    disabledContainerColor = Color(
-                                        rgb(
-                                            236,
-                                            239,
-                                            241
-                                        )
-                                    ),
-                                    disabledContentColor = Color(0xFF000000)
-                                ),
-                            )
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(vertical = 16.dp, horizontal = 18.dp),
-                                horizontalArrangement = Arrangement.SpaceBetween
-                            ) {
-                                TextButton(onClick = { /*TODO*/ }) {
-                                    Text(
-                                        "Forgot Password",
-                                        color = Color.LightGray,
-                                        style = MaterialTheme.typography.bodyMedium
-                                    )
-                                }
-                                val signInContext = LocalContext.current
-                                TextButton(onClick = {
-                                    signInContext.startActivity(
-                                        Intent(
-                                            signInContext,
-                                            LoginActivity::class.java
-                                        )
-                                    )
-                                }) {
-                                    Text(
-                                        "I have an Account",
-                                        color = Color.LightGray,
-                                        style = MaterialTheme.typography.bodyMedium,
-                                    )
-                                }
-
-                            }
-                        }
-
-                        Row(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(18.dp),
-                            verticalAlignment = Alignment.Bottom,
-                            horizontalArrangement = Arrangement.Center
-                        ) {
-                            AppVersion()
-                        }
-                    }
-                }
-            }
+            CreateRegisterScreen()
         }
     }
 }
@@ -250,9 +69,9 @@ fun RegisterScreen(content: @Composable () -> Unit) {
     }
 }
 
-@Preview(showBackground = true)
+
 @Composable
-fun GreetingPreview3() {
+fun CreateRegisterScreen() {
     RegisterScreen {
         val mutableGivenName = remember {
             mutableStateOf("")
@@ -263,7 +82,7 @@ fun GreetingPreview3() {
         val mutableContactNumber = remember {
             mutableStateOf("")
         }
-        val mutableEmailAddress = remember {
+        val mutableStudentNumber = remember {
             mutableStateOf("")
         }
         val mutablePassword = remember {
@@ -274,151 +93,160 @@ fun GreetingPreview3() {
         }
         Column(verticalArrangement = Arrangement.Top) {
             Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(18.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+                    modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(18.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Surface(modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 16.dp)) {
+                        .fillMaxWidth()
+                        .padding(bottom = 16.dp)) {
                     Text(
-                        "Create an Account", style = MaterialTheme.typography.headlineMedium,
-                        fontWeight = FontWeight.ExtraBold,
-                        textAlign = TextAlign.Left
+                            "Create an Account", style = MaterialTheme.typography.headlineMedium,
+                            fontWeight = FontWeight.ExtraBold,
+                            textAlign = TextAlign.Left
                     )
                 }
                 Column(
-                    modifier = Modifier.padding(vertical = 16.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                        modifier = Modifier.padding(vertical = 16.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        "Fill in this form to create a new account 👍",
-                        style = MaterialTheme.typography.headlineSmall,
-                        textAlign = TextAlign.Center,
+                            "Fill in this form to create a new account 👍",
+                            style = MaterialTheme.typography.headlineSmall,
+                            textAlign = TextAlign.Center,
                     )
+
+                    Card(modifier = Modifier.background(color = Color.LightGray)){
+                        Text(
+                                "Fill in this form to create a new account 👍",
+                                style = MaterialTheme.typography.headlineSmall,
+                                textAlign = TextAlign.Center,
+                        )
+                    }
 
                 }
                 Column(
-                    modifier = Modifier.padding(18.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                        modifier = Modifier.padding(18.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
                 ) {
+                    InputField( // Student Number
+                            modifier = Modifier.fillMaxWidth(),
+                            valueState = mutableStudentNumber,
+                            labelId = "Student Number",
+                            keyboardType = KeyboardType.NumberPassword,
+                            imeAction = ImeAction.Next,
+                            leadingIcon = {
+                                Icon(
+                                        imageVector = Icons.Rounded.Badge,
+                                        contentDescription = "Badge Icon"
+                                )
+                            })
+                    InputField(//Given Name
+                            modifier = Modifier.fillMaxWidth(),
+                            valueState = mutableGivenName,
+                            labelId = "Given Name",
+                            keyboardType = KeyboardType.Text,
+                            imeAction = ImeAction.Next,
+                            leadingIcon = {
+                                Icon(
+                                        imageVector = Icons.Rounded.Person2,
+                                        contentDescription = "Person Icon"
+                                )
+                            })
+                    InputField( //Family Name
+                            modifier = Modifier.fillMaxWidth(),
+                            valueState = mutableFamilyName,
+                            labelId = "Family Name",
+                            keyboardType = KeyboardType.Text,
+                            imeAction = ImeAction.Next,
+                            leadingIcon = {
+                                Icon(
+                                        imageVector = Icons.Rounded.People,
+                                        contentDescription = "People Icon"
+                                )
+                            })
+                    InputField( //Contact number
+                            modifier = Modifier.fillMaxWidth(),
+                            valueState = mutableContactNumber,
+                            labelId = "Contact Number",
+                            keyboardType = KeyboardType.Phone,
+                            imeAction = ImeAction.Next,
+                            leadingIcon = {
+                                Icon(
+                                        imageVector = Icons.Rounded.PhoneAndroid,
+                                        contentDescription = "Phone Icon"
+                                )
+                            })
+
                     InputField(
-                        modifier = Modifier.fillMaxWidth(),
-                        valueState = mutableGivenName,
-                        labelId = "Given Name",
-                        keyboardType = KeyboardType.Text,
-                        imeAction = ImeAction.Next,
-                        leadingIcon = {
-                            Icon(
-                                imageVector = Icons.Rounded.Person2,
-                                contentDescription = "Person Icon"
-                            )
-                        })
+                            modifier = Modifier.fillMaxWidth(),
+                            valueState = mutablePassword,
+                            labelId = "Password",
+                            keyboardType = KeyboardType.Password,
+                            visualTransformation = PasswordVisualTransformation(),
+                            leadingIcon = {
+                                Icon(
+                                        imageVector = Icons.Rounded.Password,
+                                        contentDescription = "Password Icon"
+                                )
+                            })
                     InputField(
-                        modifier = Modifier.fillMaxWidth(),
-                        valueState = mutableFamilyName,
-                        labelId = "Family Name",
-                        keyboardType = KeyboardType.Text,
-                        imeAction = ImeAction.Next,
-                        leadingIcon = {
-                            Icon(
-                                imageVector = Icons.Rounded.People,
-                                contentDescription = "People Icon"
-                            )
-                        })
-                    InputField(
-                        modifier = Modifier.fillMaxWidth(),
-                        valueState = mutableContactNumber,
-                        labelId = "Contact Number",
-                        keyboardType = KeyboardType.Phone,
-                        imeAction = ImeAction.Next,
-                        leadingIcon = {
-                            Icon(
-                                imageVector = Icons.Rounded.PhoneAndroid,
-                                contentDescription = "Phone Icon"
-                            )
-                        })
-                    InputField(
-                        modifier = Modifier.fillMaxWidth(),
-                        valueState = mutableEmailAddress,
-                        labelId = "Email Address",
-                        keyboardType = KeyboardType.Email,
-                        imeAction = ImeAction.Next,
-                        leadingIcon = {
-                            Icon(
-                                imageVector = Icons.Rounded.Email,
-                                contentDescription = "Email Icon"
-                            )
-                        })
-                    InputField(
-                        modifier = Modifier.fillMaxWidth(),
-                        valueState = mutablePassword,
-                        labelId = "Password",
-                        keyboardType = KeyboardType.Password,
-                        visualTransformation = PasswordVisualTransformation(),
-                        leadingIcon = {
-                            Icon(
-                                imageVector = Icons.Rounded.Password,
-                                contentDescription = "Password Icon"
-                            )
-                        })
-                    InputField(
-                        modifier = Modifier.fillMaxWidth(),
-                        valueState = mutableConfirmPassword,
-                        labelId = "Confirm Password",
-                        keyboardType = KeyboardType.Password,
-                        visualTransformation = PasswordVisualTransformation(),
-                        leadingIcon = {
-                            Icon(
-                                imageVector = Icons.Rounded.Password,
-                                contentDescription = "Password Icon"
-                            )
-                        })
+                            modifier = Modifier.fillMaxWidth(),
+                            valueState = mutableConfirmPassword,
+                            labelId = "Confirm Password",
+                            keyboardType = KeyboardType.Password,
+                            visualTransformation = PasswordVisualTransformation(),
+                            leadingIcon = {
+                                Icon(
+                                        imageVector = Icons.Rounded.Password,
+                                        contentDescription = "Password Icon"
+                                )
+                            })
                     Spacer(modifier = Modifier.size(32.dp))
                     DefaultButton(
-                        onClick = { /*TODO*/ },
-                        buttonText = "Sign Up",
-                        modifier = Modifier.fillMaxWidth(),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = Color(rgb(200, 230, 201)),
-                            contentColor = Color(0xFF000000),
-                            disabledContainerColor = Color(
-                                rgb(
-                                    236,
-                                    239,
-                                    241
-                                )
+                            onClick = { /*TODO*/ },
+                            buttonText = "Sign Up",
+                            modifier = Modifier.fillMaxWidth(),
+                            colors = ButtonDefaults.buttonColors(
+                                    containerColor = Color(rgb(200, 230, 201)),
+                                    contentColor = Color(0xFF000000),
+                                    disabledContainerColor = Color(
+                                            rgb(
+                                                    236,
+                                                    239,
+                                                    241
+                                            )
+                                    ),
+                                    disabledContentColor = Color(0xFF000000)
                             ),
-                            disabledContentColor = Color(0xFF000000)
-                        ),
                     )
                     Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 16.dp, horizontal = 18.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween
+                            modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = 16.dp, horizontal = 18.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         TextButton(onClick = { /*TODO*/ }) {
                             Text(
-                                "Forgot Password",
-                                color = Color.LightGray,
-                                style = MaterialTheme.typography.bodyMedium
+                                    "Forgot Password",
+                                    color = Color.LightGray,
+                                    style = MaterialTheme.typography.bodyMedium
                             )
                         }
                         val signInContext = LocalContext.current
                         TextButton(onClick = {
                             signInContext.startActivity(
-                                Intent(
-                                    signInContext,
-                                    LoginActivity::class.java
-                                )
+                                    Intent(
+                                            signInContext,
+                                            LoginActivity::class.java
+                                    )
                             )
                         }) {
                             Text(
-                                "I have an Account",
-                                color = Color.LightGray,
-                                style = MaterialTheme.typography.bodyMedium,
+                                    "I have an Account",
+                                    color = Color.LightGray,
+                                    style = MaterialTheme.typography.bodyMedium,
                             )
                         }
 
@@ -426,15 +254,22 @@ fun GreetingPreview3() {
                 }
 
                 Row(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(18.dp),
-                    verticalAlignment = Alignment.Bottom,
-                    horizontalArrangement = Arrangement.Center
+                        modifier = Modifier
+                                .fillMaxSize()
+                                .padding(18.dp),
+                        verticalAlignment = Alignment.Bottom,
+                        horizontalArrangement = Arrangement.Center
                 ) {
                     AppVersion()
                 }
             }
         }
     }
+}
+
+
+@Preview(showBackground = true)
+@Composable
+fun GreetingPreview3() {
+    CreateRegisterScreen()
 }

@@ -11,6 +11,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -83,9 +85,9 @@ fun SearchBar(
             singleLine = true,
             textStyle = TextStyle(color = MaterialTheme.colorScheme.background),
             modifier = Modifier
-                .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.onBackground, CircleShape)
-                .padding(horizontal = 20.dp, vertical = 12.dp)
+                    .fillMaxWidth()
+                    .background(MaterialTheme.colorScheme.onBackground, CircleShape)
+                    .padding(horizontal = 20.dp, vertical = 12.dp)
         )
         if (isHintDisplayed) {
             Text(
@@ -100,6 +102,7 @@ fun SearchBar(
 
 @Composable
 fun TextWithIcon(text: String, textColor: Color, icon: ImageVector, iconDescription: String) {
+
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(4.dp)
