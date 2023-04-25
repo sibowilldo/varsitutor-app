@@ -38,6 +38,8 @@ import dev.dicesystems.varsitutor.R
 import dev.dicesystems.varsitutor.components.CustomTopAppBar
 import dev.dicesystems.varsitutor.components.DefaultButton
 import dev.dicesystems.varsitutor.components.TextWithIcon
+import dev.dicesystems.varsitutor.data.remote.responses.CreatedAt
+import dev.dicesystems.varsitutor.data.remote.responses.ExpiresAt
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -45,7 +47,13 @@ fun VacancyShowScreen(
     navController: NavController,
     title: String?,
     description: String?,
-    department: String?
+    department: String?,
+    category: String?,
+    type: String?,
+    user: String?,
+    location: String?,
+    //expires: String?,
+    //created: String?,
 ) {
     Scaffold(
         topBar = {
@@ -86,16 +94,16 @@ fun VacancyShowScreen(
                     ) {
 
                         TextWithIcon(
-                            text = "Category", textColor = Color.LightGray, icon =
+                            text = "$category", textColor = Color.LightGray, icon =
                             Icons.Rounded.CalendarToday, iconDescription = ""
                         )
                         TextWithIcon(
-                            text = "Type", textColor = Color.LightGray, icon =
+                            text = "$type", textColor = Color.LightGray, icon =
                             Icons.Rounded.CalendarToday, iconDescription = ""
                         )
 
                         TextWithIcon(
-                            text = "User", textColor = Color.LightGray, icon =
+                            text = "$user", textColor = Color.LightGray, icon =
                             Icons.Rounded.CalendarToday, iconDescription = ""
                         )
                         TextWithIcon(
@@ -103,16 +111,17 @@ fun VacancyShowScreen(
                             Icons.Rounded.CalendarToday, iconDescription = ""
                         )
                         TextWithIcon(
-                            text = "Location", textColor = Color.LightGray, icon =
+                            text = "$location", textColor = Color.LightGray, icon =
                             Icons.Rounded.CalendarToday, iconDescription = ""
                         )
 
                         TextWithIcon(
-                            text = "Expires", textColor = Color.LightGray, icon =
+                            text = "" +
+                                    "expires", textColor = Color.LightGray, icon =
                             Icons.Rounded.CalendarToday, iconDescription = ""
                         )
                         TextWithIcon(
-                            text = "Created", textColor = Color.LightGray, icon =
+                            text = "created", textColor = Color.LightGray, icon =
                             Icons.Rounded.CalendarToday, iconDescription = ""
                         )
                     }
