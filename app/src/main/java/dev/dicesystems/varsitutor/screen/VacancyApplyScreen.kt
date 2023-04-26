@@ -38,6 +38,21 @@ import dev.dicesystems.varsitutor.R
 import dev.dicesystems.varsitutor.components.CustomTopAppBar
 import dev.dicesystems.varsitutor.components.DefaultButton
 import dev.dicesystems.varsitutor.components.TextWithIcon
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.TextField
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.textInputServiceFactory
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PlatformTextInput
+import com.google.android.material.textfield.TextInputLayout
+import java.lang.reflect.Field
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -69,6 +84,8 @@ fun VacancyApplyScreen(
                     text = "Application for $title",
                     style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Black)
                 )
+
+
 
                 Column(
                     modifier = Modifier
@@ -108,9 +125,10 @@ fun PreviewVacancyApply() {
                 text = "Application for Opening",
                 style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Black)
             )
-
-
         }
+
+
+
         Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)) {
             DefaultButton(
                 onClick = { /*TODO*/ },

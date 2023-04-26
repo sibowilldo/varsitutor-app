@@ -5,6 +5,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import dev.dicesystems.varsitutor.data.remote.ApiServiceInterface
+import dev.dicesystems.varsitutor.repository.ApplicationRepository
 import dev.dicesystems.varsitutor.repository.VacancyRepository
 import dev.dicesystems.varsitutor.util.Constants.BASE_URL
 import retrofit2.Retrofit
@@ -20,6 +21,12 @@ object AppModule {
     fun provideVacancyRepository(
         api: ApiServiceInterface
     ) = VacancyRepository(api)
+
+    @Singleton
+    @Provides
+    fun provideApplicationRepository(
+        api: ApiServiceInterface
+    ) = ApplicationRepository(api)
 
 
     @Singleton

@@ -1,8 +1,8 @@
-package dev.dicesystems.varsitutor.data.remote.responses
+package dev.dicesystems.varsitutor.data.models
 
 import java.io.File
 
-data class ApplicationX(
+data class ApplicationModel(
     val vacancy_id: Int,
     val user_id: Int,
     val contact_number: String,
