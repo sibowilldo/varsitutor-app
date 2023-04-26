@@ -52,8 +52,8 @@ fun VacancyShowScreen(
     type: String?,
     user: String?,
     location: String?,
-    //expires: String?,
-    //created: String?,
+    expires: String?,
+    created: String?,
 ) {
     Scaffold(
         topBar = {
@@ -117,11 +117,11 @@ fun VacancyShowScreen(
 
                         TextWithIcon(
                             text = "" +
-                                    "expires", textColor = Color.LightGray, icon =
+                                    "$expires", textColor = Color.LightGray, icon =
                             Icons.Rounded.CalendarToday, iconDescription = ""
                         )
                         TextWithIcon(
-                            text = "created", textColor = Color.LightGray, icon =
+                            text = "$created", textColor = Color.LightGray, icon =
                             Icons.Rounded.CalendarToday, iconDescription = ""
                         )
                     }
@@ -142,7 +142,7 @@ fun VacancyShowScreen(
             }
             Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)) {
                 DefaultButton(
-                    onClick = { /*TODO*/ },
+                    onClick = { navController.navigate("VacancyApplyScreen") },
                     buttonText = stringResource(id = R.string.button_apply_now),
                     textColor = MaterialTheme.colorScheme.onPrimaryContainer,
                     colors = ButtonDefaults.buttonColors(

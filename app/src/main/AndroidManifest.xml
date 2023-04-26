@@ -17,6 +17,11 @@
         android:theme="@style/Theme.Varsitutor"
         tools:targetApi="31">
         <activity
+            android:name=".screen.VacancyApplyScreen"
+            android:exported="false"
+            android:label="@string/title_activity_vacancy_apply_screen"
+            android:theme="@style/Theme.Varsitutor.NoActionBar" />
+        <activity
             android:name=".ComposeActivity"
             android:exported="false"
             android:label="@string/title_activity_compose"

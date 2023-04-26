@@ -320,8 +320,8 @@ fun VacancyItem(
                         vacancy.type,
                         vacancy.user,
                         vacancy.location,
-                        //vacancy.expires_at,
-                        //vacancy.created_at,
+                        vacancy.expires_at.human,
+                        vacancy.created_at.human,
                         )
                 )
             }

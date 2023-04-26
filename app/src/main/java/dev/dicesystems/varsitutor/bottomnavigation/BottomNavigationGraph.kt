@@ -11,6 +11,8 @@ import dev.dicesystems.varsitutor.screen.MoreScreen
 import dev.dicesystems.varsitutor.screen.NotificationScreen
 import dev.dicesystems.varsitutor.screen.ProfileScreen
 import dev.dicesystems.varsitutor.screen.VacancyShowScreen
+import dev.dicesystems.varsitutor.screen.VacancyApplyScreen
+
 
 @Composable
 fun BottomNavigationGraph(
@@ -34,7 +36,7 @@ fun BottomNavigationGraph(
         composable(route = BottomBarScreen.Profile.route){
             ProfileScreen(navController = navigationController)
         }
-        composable(route = Screens.VacancyDetails.route+"/{title}/{description}/{department}/{category}/{type}/{user}/{location}",
+        composable(route = Screens.VacancyDetails.route+"/{title}/{description}/{department}/{category}/{type}/{user}/{location}/{expires}/{created}",
         arguments = listOf(
                 navArgument("title"){},
                 navArgument("description"){},
@@ -43,8 +45,8 @@ fun BottomNavigationGraph(
                 navArgument("type"){},
                 navArgument("user"){},
                 navArgument("location"){},
-                //navArgument("expires"){},
-                //navArgument("created"){},
+                navArgument("expires"){},
+                navArgument("created"){},
 
         )){
             VacancyShowScreen(
@@ -56,9 +58,19 @@ fun BottomNavigationGraph(
                 type = it.arguments?.getString("type"),
                 user = it.arguments?.getString("user"),
                 location = it.arguments?.getString("location"),
-                //expires = it.arguments?.getString("expires"),
-                //created = it.arguments?.getString("created"),
+                expires = it.arguments?.getString("expires"),
+                created = it.arguments?.getString("created"),
                 )
+        }
+        composable(route = Screens.VacancyApply.route+"/{title}",
+            arguments = listOf(
+                navArgument("title"){}
+
+                )){
+            VacancyApplyScreen(
+                navController = navigationController,
+                title = it.arguments?.getString("title")
+            )
         }
 
     }
