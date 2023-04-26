@@ -21,10 +21,13 @@ interface ApiServiceInterface {
     @GET("applications")
     suspend fun getApplicationList(@Query("page") page: Int): Application
 
-    @GET("application/{user_id}")
+    @GET("applications/{user_id}")
     suspend fun getApplication(
         @Path("user_id") id: String
     ): ApplicationX
+
+
+
 
 
 }
