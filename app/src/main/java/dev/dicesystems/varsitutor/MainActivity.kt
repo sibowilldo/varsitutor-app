@@ -45,7 +45,6 @@ class MainActivity : ComponentActivity() {
 
                         val context = LocalContext.current
                         val preferenceManager = PreferenceManager(context)
-                        Log.d("MAIN ACTIVITY TAG", "onCreate: ${preferenceManager.getToken()}")
                         if (preferenceManager.getToken() == null) {
                             context.startActivity(Intent(context, LoginActivity::class.java))
                         } else {

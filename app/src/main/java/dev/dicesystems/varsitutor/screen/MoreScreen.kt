@@ -1,5 +1,7 @@
 package dev.dicesystems.varsitutor.screen
 
+import android.content.Intent
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,14 +25,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.ramcosta.composedestinations.navigation.clearBackStack
+import dev.dicesystems.varsitutor.LoginActivity
 import dev.dicesystems.varsitutor.R
 import dev.dicesystems.varsitutor.components.CustomTopAppBar
 import dev.dicesystems.varsitutor.components.DefaultButton
+import dev.dicesystems.varsitutor.util.PreferenceManager
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -45,7 +51,7 @@ fun MoreScreen(navController: NavController) {
         },
     ) {
         Surface(modifier = Modifier.padding(it)) {
-            GenerateSettings()
+            GenerateSettings(navController)
         }
     }
 }
@@ -53,7 +59,7 @@ fun MoreScreen(navController: NavController) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GenerateSettings() {
+fun GenerateSettings(navController: NavController) {
     Scaffold(containerColor = MaterialTheme.colorScheme.surface) {
         Box(modifier = Modifier.padding(it), contentAlignment = Alignment.BottomCenter) {
             Column(
@@ -68,14 +74,20 @@ fun GenerateSettings() {
             ) {
                 Box {
                     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-
+                        val context = navController.context
+                        val preferenceManager = PreferenceManager(context)
                         Text(
                             text = "Account".uppercase(),
                             style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Black)
                         )
                         Text(
                             text = "Logout".uppercase() + " sibongiseni@mail.com",
-                            style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Normal)
+                            style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Normal),
+                            modifier = Modifier.clickable {
+                                preferenceManager.clearToken()
+                                navController.clearBackStack("more")
+                                context.startActivity(Intent(context, LoginActivity::class.java))
+                            }
                         )
                         Text(
                             text = "Reset Password".uppercase(),
@@ -178,5 +190,5 @@ fun GenerateSettings() {
 @Preview
 @Composable
 fun PreviewSettings() {
-    GenerateSettings()
+    GenerateSettings(navController = NavController(LocalContext.current))
 }

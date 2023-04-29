@@ -1,6 +1,5 @@
 package dev.dicesystems.varsitutor.screen
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -28,7 +27,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -44,6 +42,7 @@ import androidx.navigation.NavController
 import dev.dicesystems.varsitutor.R
 import dev.dicesystems.varsitutor.components.CustomTopAppBar
 import dev.dicesystems.varsitutor.viewmodels.MainViewModel
+import dev.dicesystems.varsitutor.viewmodels.ProfileViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -72,12 +71,11 @@ fun ProfileScreen(navController: NavController) {
 @Composable
 fun GenerateProfileScreen(
     navController: NavController,
-    viewModel: MainViewModel = hiltViewModel()
+    viewModel: MainViewModel = hiltViewModel(),
+    profileViewModel: ProfileViewModel = hiltViewModel(),
 ) {
-    val loginState by viewModel.loginState.collectAsState()
-
-    Log.d("PROFILE TAG", "GenerateProfileScreen: ${loginState.data}")
-
+    profileViewModel.getUserInfo(navController.context)
+    val userState by profileViewModel.userState.collectAsState()
 
     Column(
         modifier = Modifier.padding(16.dp),
@@ -97,7 +95,7 @@ fun GenerateProfileScreen(
                 )
                 Column() {
                     Text(
-                        text = "${loginState.data?.token}",
+                        text = "${userState?.name}",
                         style = MaterialTheme.typography.headlineMedium,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
@@ -108,13 +106,13 @@ fun GenerateProfileScreen(
                     ) {
                         Text(
                             color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f),
-                            text = "Joined 2wks ago",
+                            text =  "${userState?.joined}",
                             modifier = Modifier,
                             style = MaterialTheme.typography.labelMedium
                         )
                         Text(
                             color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f),
-                            text = "Applications Sent 0",
+                            text = "Applications Sent ${userState?.applicationsCount}",
                             modifier = Modifier,
                             style = MaterialTheme.typography.labelMedium
                         )
@@ -146,7 +144,7 @@ fun GenerateProfileScreen(
                             tint = MaterialTheme.colorScheme.onBackground,
                             contentDescription = "Mail Icon"
                         )
-                        Text(text = "sibongiseni@dut.ac.za")
+                        Text(text = "${userState?.email}")
                     }
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
@@ -158,7 +156,7 @@ fun GenerateProfileScreen(
                             tint = MaterialTheme.colorScheme.onBackground,
                             contentDescription = "Android Phone Icon"
                         )
-                        Text(text = "071 8988 004")
+                        Text(text = "${userState?.contactNumber}")
                     }
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
@@ -170,7 +168,7 @@ fun GenerateProfileScreen(
                             tint = MaterialTheme.colorScheme.onBackground,
                             contentDescription = "Person Pin Icon"
                         )
-                        Text(text = "KwaZulu-Natal, Durban")
+                        Text(text = "${userState?.provinceCity}")
                     }
                 }
             }

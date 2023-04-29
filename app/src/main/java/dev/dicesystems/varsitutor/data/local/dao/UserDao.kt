@@ -11,18 +11,18 @@ import dev.dicesystems.varsitutor.data.local.entities.UserEntity
 interface UserDao {
 
     @Query("SELECT * FROM User WHERE id = (:userId)")
-    fun findById(userId: Int): UserEntity
+    suspend fun findById(userId: Int): UserEntity
 
-    @Query("SELECT COUNT(*) FROM User WHERE id = (:token)")
-    fun userExists(token: String): Int
+    @Query("SELECT COUNT(*) FROM User WHERE token = (:token)")
+    suspend fun userExists(token: String): Int
 
-    @Query("SELECT * FROM User WHERE id = (:token)")
-    fun findByToken(token: String): UserEntity
+    @Query("SELECT * FROM User WHERE token = (:token)")
+    suspend fun findByToken(token: String): UserEntity
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(vararg user: UserEntity)
+    suspend fun insert(vararg user: UserEntity)
 
     @Delete
-    fun delete(user: UserEntity)
+    suspend fun delete(user: UserEntity)
 
 }

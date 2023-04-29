@@ -10,7 +10,7 @@ import dagger.hilt.components.SingletonComponent
 import dev.dicesystems.varsitutor.data.local.AppDatabase
 import dev.dicesystems.varsitutor.data.local.dao.UserDao
 import dev.dicesystems.varsitutor.data.remote.ApiServiceInterface
-import dev.dicesystems.varsitutor.repository.AppRepository
+import dev.dicesystems.varsitutor.repository.MainRepositoryImpl
 import dev.dicesystems.varsitutor.util.AuthInterceptor
 import dev.dicesystems.varsitutor.util.Constants.BASE_URL
 import dev.dicesystems.varsitutor.util.PreferenceManager
@@ -31,8 +31,9 @@ object AppModule{
     @Singleton
     @Provides
     fun provideAppRepository(
-        api: ApiServiceInterface
-    ) = AppRepository(api)
+        api: ApiServiceInterface,
+        userDao: UserDao
+    ) = MainRepositoryImpl(api, userDao)
 
     @Provides
     @Singleton
@@ -49,7 +50,6 @@ object AppModule{
     @Singleton
     @Provides
     fun provideApi(context: Context): ApiServiceInterface {
-
         val logging = HttpLoggingInterceptor()
         logging.setLevel(HttpLoggingInterceptor.Level.BASIC)
         val client: OkHttpClient = OkHttpClient.Builder()

@@ -2,6 +2,7 @@ package dev.dicesystems.varsitutor.viewmodels
 
 import android.content.Context
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -12,8 +13,7 @@ import dev.dicesystems.varsitutor.data.models.VacancyModel
 import dev.dicesystems.varsitutor.data.remote.responses.ResponseMessage
 import dev.dicesystems.varsitutor.data.remote.responses.User
 import dev.dicesystems.varsitutor.data.sessions.UserSession
-import dev.dicesystems.varsitutor.repository.AppRepository
-import dev.dicesystems.varsitutor.repository.DatabaseRepository
+import dev.dicesystems.varsitutor.repository.MainRepositoryImpl
 import dev.dicesystems.varsitutor.util.PreferenceManager
 import dev.dicesystems.varsitutor.util.Resource
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,7 +23,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val appRepository: AppRepository
+    private val mainRepositoryImpl: MainRepositoryImpl
 ) : ViewModel() {
 
     val TAG = "VIEW MODEL TAG"
@@ -40,25 +40,25 @@ class MainViewModel @Inject constructor(
         loadVacancyPaginatedList()
     }
 
-    fun doToggleFavorite(id: Int) {
+    fun doToggleFavorite(id: Int, context: Context) {
         viewModelScope.launch {
             isLoading.value = true
-            when (val results = appRepository.toggleFavorite(id)) {
+            when (val results = mainRepositoryImpl.toggleFavorite(id)) {
                 is Resource.Success -> {
                     Log.d(TAG, "doToggleFavorite: ${results.data?.message}")
-                    responseMessage.value = ResponseMessage(message = results.data?.message!!)
                     loadError.value = ""
                     isLoading.value = false
+                    Toast.makeText(context, results.data?.message!!, Toast.LENGTH_SHORT).show()
                 }
 
                 is Resource.Error -> {
-                    responseMessage.value = ResponseMessage(message = results.data?.message!!)
+                    Toast.makeText(context, results.data?.message!!, Toast.LENGTH_SHORT).show()
                     isLoading.value = false
                     loadError.value = results.data.message
                 }
 
                 else -> {
-                    responseMessage.value = ResponseMessage(message = results.data?.message!!)
+                    Toast.makeText(context, results.data?.message!!, Toast.LENGTH_SHORT).show()
                     loadError.value = results.data.message
                     isLoading.value = false
                 }
@@ -70,7 +70,7 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
 
             isLoading.value = true
-            when (val results = appRepository.getVacancyList(currentPage)) {
+            when (val results = mainRepositoryImpl.getVacancyList(currentPage)) {
                 is Resource.Success -> {
                     endReached.value = currentPage >= 5// results.data!!.meta?.last_page!!
                     val vacancyEntries = results.data!!.data.mapIndexed { _, entry ->
@@ -114,29 +114,31 @@ class MainViewModel @Inject constructor(
     fun doLogin(context: Context, email: String, password: String, device_name: String) {
         viewModelScope.launch {
             _loginState.value = Resource.Empty()
-            val response = appRepository.login(email, password, device_name)
+            val response = mainRepositoryImpl.login(email, password, device_name)
             val preferenceManager = PreferenceManager(context)
             if (response.isSuccessful) {
                 _loginState.value = response.body()?.let { Resource.Success(data = it) }!!
                 response.body()?.let {
-//                    if(!dbRepository.checkUserExists(token = it.token!!)){
-//                        dbRepository.saveUser(UserEntity(
-//                            internalId = it.user.internal_id,
-//                            name = it.user.name!!,
-//                            givenName = it.user.given_name,
-//                            familyName = it.user.family_name,
-//                            contactNumber = it.user.contact_number,
-//                            email = it.user.email!!,
-//                            provinceCity = it.user.province_city,
-//                            profilePhotoUrl = it.user.profile_photo_url!!,
-//                            status = it.user.status!!,
-//                            applicationsCount = it.user.applications_count!!,
-//                            joined = it.user.joined?.human,
-//                            verified = it.user.verified,
-//                            token = it.token,
-//                        ))
-//                    }
-                    it.token.let { token -> preferenceManager.saveToken(token!!) }
+                    if(!mainRepositoryImpl.checkUserExists(token = it.token!!)){
+                        mainRepositoryImpl.saveUser(
+                            UserEntity(
+                                internalId = it.user.internal_id,
+                                name = it.user.name!!,
+                                givenName = it.user.given_name,
+                                familyName = it.user.family_name,
+                                contactNumber = it.user.contact_number,
+                                email = it.user.email!!,
+                                provinceCity = it.user.province_city,
+                                profilePhotoUrl = it.user.profile_photo_url!!,
+                                status = it.user.status!!,
+                                applicationsCount = it.user.applications_count!!,
+                                joined = it.user.joined?.human,
+                                verified = it.user.verified,
+                                token = it.token,
+                            )
+                        )
+                    }
+                    it.token.let { token -> preferenceManager.saveToken(token) }
                 }
                 loadError.value = ""
                 isLoading.value = false
@@ -160,7 +162,7 @@ class MainViewModel @Inject constructor(
     fun doGetLoggedInUser(context: Context) {
         viewModelScope.launch {
             _loginState.value = Resource.Empty()
-            val response = appRepository.getLoggedInUser()
+            val response = mainRepositoryImpl.getLoggedInUser()
             if (response.isSuccessful) {
                 _loginState.value = Resource.Success(response.body()!!)
                 loadError.value = ""

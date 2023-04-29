@@ -449,15 +449,13 @@ fun VacancyItem(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.SpaceEvenly
             ) {
-                val context = LocalContext.current
                 IconButton(
                     modifier = Modifier
                         .size(42.dp)
                         .weight(1F)
                         .width(20.dp),
                     onClick = {
-                        viewModel.doToggleFavorite(vacancy.id)
-                        Toast.makeText(context, responseMessage.message, Toast.LENGTH_LONG).show()
+                        viewModel.doToggleFavorite(vacancy.id, navController.context)
                     }) {
                     Icon(
                         imageVector = Icons.Rounded.FavoriteBorder,

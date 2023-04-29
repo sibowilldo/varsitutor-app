@@ -1,7 +1,8 @@
 package dev.dicesystems.varsitutor.repository
 
 import android.util.Log
-import dagger.hilt.android.scopes.ActivityScoped
+import dev.dicesystems.varsitutor.data.local.dao.UserDao
+import dev.dicesystems.varsitutor.data.local.entities.UserEntity
 import dev.dicesystems.varsitutor.data.remote.ApiServiceInterface
 import dev.dicesystems.varsitutor.data.remote.requests.LoginRequest
 import dev.dicesystems.varsitutor.data.remote.responses.ResponseMessage
@@ -12,13 +13,19 @@ import dev.dicesystems.varsitutor.util.Resource
 import retrofit2.HttpException
 import retrofit2.Response
 import javax.inject.Inject
+import javax.inject.Singleton
 
-@ActivityScoped
-class AppRepository @Inject constructor(
-    private val api: ApiServiceInterface
-) {
-    val TAG = "APP REPO TAG"
-    suspend fun login(email: String, password: String, device_name: String): Response<User> {
+@Singleton
+class MainRepositoryImpl @Inject constructor(
+    private val api: ApiServiceInterface,
+    private val userDao: UserDao
+): MainRepository{
+    val TAG = "MAIN REPO TAG"
+    override suspend fun login(
+        email: String,
+        password: String,
+        device_name: String
+    ): Response<User> {
         val response = try {
             api.login(LoginRequest(email, password, device_name))
         } catch (e: HttpException) {
@@ -28,7 +35,7 @@ class AppRepository @Inject constructor(
         return Response.success(response)
     }
 
-    suspend fun getLoggedInUser(): Response<User> {
+    override suspend fun getLoggedInUser(): Response<User> {
         val response = try {
             api.loggedInUser()
         } catch (e: HttpException) {
@@ -38,7 +45,7 @@ class AppRepository @Inject constructor(
         return Response.success(response)
     }
 
-    suspend fun toggleFavorite(id: Int): Resource<ResponseMessage> {
+    override suspend fun toggleFavorite(id: Int): Resource<ResponseMessage> {
         val response = try {
             api.toggleFavorite(id)
         } catch (e: HttpException) {
@@ -53,8 +60,7 @@ class AppRepository @Inject constructor(
         return Resource.Success(data = response)
     }
 
-    suspend fun getVacancyList(page: Int = 1): Resource<Vacancy> {
-
+    override suspend fun getVacancyList(page: Int): Resource<Vacancy> {
         val response = try {
             api.getVacancyList(page)
         } catch (e: Exception) {
@@ -64,7 +70,7 @@ class AppRepository @Inject constructor(
         return Resource.Success(data = response)
     }
 
-    suspend fun getVacancy(id: String): Resource<VacancyX> {
+    override suspend fun getVacancy(id: String): Resource<VacancyX> {
         val response = try {
             api.getVacancy(id)
         } catch (e: Exception) {
@@ -73,7 +79,7 @@ class AppRepository @Inject constructor(
         return Resource.Success(data = response)
     }
 
-    suspend fun registerUser(user: User): Resource<User> {
+    override suspend fun registerUser(user: User): Resource<User> {
         val response = try {
             api.registerUser(user)
         } catch (e: Exception) {
@@ -81,5 +87,17 @@ class AppRepository @Inject constructor(
         }
         Log.d("TAG", "registerUser: ${response.user}")
         return Resource.Success(data = response)
+    }
+
+    override suspend fun checkUserExists(token: String): Boolean {
+        return userDao.userExists(token) > 1
+    }
+
+    override suspend fun saveUser(userEntity: UserEntity) {
+        userDao.insert(userEntity)
+    }
+
+    override suspend fun getLoggedInUserByToken(token: String): UserEntity {
+        return userDao.findByToken(token)
     }
 }
