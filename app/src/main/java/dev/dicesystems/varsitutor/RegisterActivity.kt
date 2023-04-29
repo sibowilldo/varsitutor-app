@@ -5,7 +5,11 @@ import android.graphics.Color.rgb
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.ScrollableDefaults
+import androidx.compose.foundation.gestures.ScrollableState
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,9 +18,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Badge
 import androidx.compose.material.icons.rounded.Email
+import androidx.compose.material.icons.rounded.LocationCity
 import androidx.compose.material.icons.rounded.Password
 import androidx.compose.material.icons.rounded.People
 import androidx.compose.material.icons.rounded.Person2
@@ -35,6 +42,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -45,6 +53,8 @@ import androidx.compose.ui.unit.dp
 import dev.dicesystems.varsitutor.components.AppVersion
 import dev.dicesystems.varsitutor.components.DefaultButton
 import dev.dicesystems.varsitutor.components.InputField
+import dev.dicesystems.varsitutor.data.models.UserModel
+import dev.dicesystems.varsitutor.data.remote.responses.UserX
 import dev.dicesystems.varsitutor.ui.theme.VarsitutorTheme
 
 class RegisterActivity : ComponentActivity() {
@@ -82,6 +92,9 @@ fun CreateRegisterScreen() {
         val mutableContactNumber = remember {
             mutableStateOf("")
         }
+        val mutableProvinceCity = remember {
+            mutableStateOf("")
+        }
         val mutableStudentNumber = remember {
             mutableStateOf("")
         }
@@ -94,19 +107,21 @@ fun CreateRegisterScreen() {
         Column(verticalArrangement = Arrangement.Top) {
             Column(
                     modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(18.dp),
+                        .verticalScroll(
+                            state = rememberScrollState()
+                        )
+                        .fillMaxWidth()
+                        .padding(18.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Surface(modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 16.dp)) {
-                    Text(
-                            "Create an Account", style = MaterialTheme.typography.headlineMedium,
+                Text(
+                            stringResource(id = R.string.heading_create_an_account), style = MaterialTheme.typography.headlineMedium,
                             fontWeight = FontWeight.ExtraBold,
-                            textAlign = TextAlign.Left
+                            textAlign = TextAlign.Left,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 16.dp, start = 8.dp)
                     )
-                }
                 Column(
                         modifier = Modifier.padding(vertical = 16.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
@@ -117,13 +132,6 @@ fun CreateRegisterScreen() {
                             textAlign = TextAlign.Center,
                     )
 
-                    Card(modifier = Modifier.background(color = Color.LightGray)){
-                        Text(
-                                "Fill in this form to create a new account 👍",
-                                style = MaterialTheme.typography.headlineSmall,
-                                textAlign = TextAlign.Center,
-                        )
-                    }
 
                 }
                 Column(
@@ -179,7 +187,23 @@ fun CreateRegisterScreen() {
                                 )
                             })
 
-                    InputField(
+                    InputField( // Province & City
+                            modifier = Modifier.fillMaxWidth(),
+                            placeholder = {
+                                          Text("KZN, Durban")
+                            },
+                            valueState = mutableProvinceCity,
+                            labelId = "Province & City",
+                            keyboardType = KeyboardType.Text,
+                            imeAction = ImeAction.Next,
+                            leadingIcon = {
+                                Icon(
+                                        imageVector = Icons.Rounded.LocationCity,
+                                        contentDescription = "Phone Icon"
+                                )
+                            })
+
+                    InputField( // Password
                             modifier = Modifier.fillMaxWidth(),
                             valueState = mutablePassword,
                             labelId = "Password",
@@ -191,7 +215,7 @@ fun CreateRegisterScreen() {
                                         contentDescription = "Password Icon"
                                 )
                             })
-                    InputField(
+                    InputField( // Confirm Password
                             modifier = Modifier.fillMaxWidth(),
                             valueState = mutableConfirmPassword,
                             labelId = "Confirm Password",
@@ -204,12 +228,21 @@ fun CreateRegisterScreen() {
                                 )
                             })
                     Spacer(modifier = Modifier.size(32.dp))
+                    val newUser = UserModel(
+                        user = UserX(
+                            contact_number = mutableContactNumber.value,
+                            family_name = mutableFamilyName.value,
+                            given_name = mutableGivenName.value,
+                            internal_id = mutableStudentNumber.value,
+                            province_city = "",
+                        )
+                    )
                     DefaultButton(
                             onClick = { /*TODO*/ },
                             buttonText = "Sign Up",
                             modifier = Modifier.fillMaxWidth(),
                             colors = ButtonDefaults.buttonColors(
-                                    containerColor = Color(rgb(200, 230, 201)),
+                                    containerColor = MaterialTheme.colorScheme.secondaryContainer,
                                     contentColor = Color(0xFF000000),
                                     disabledContainerColor = Color(
                                             rgb(

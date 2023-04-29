@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -39,7 +40,6 @@ fun AppNavigation() {
     val navController = rememberNavController()
     Scaffold(
         topBar = {
-
         },
         bottomBar = { BottomBar(navHostController = navController) }
     ) {
@@ -67,7 +67,7 @@ fun BottomBar(
     Row(
         modifier = Modifier
             .padding(vertical = 8.dp, horizontal = 20.dp)
-            .background(MaterialTheme.colorScheme.background)
+            .background(MaterialTheme.colorScheme.background.copy(alpha = 0.5f))
             .fillMaxWidth(),
         horizontalArrangement  = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
@@ -89,13 +89,13 @@ fun RowScope.AddItem(
     ) {
     val selected = currentDestination?.hierarchy?.any {  it.route == screen.route } == true
 
-    val background =  if (selected) MaterialTheme.colorScheme.onPrimaryContainer else Color.Transparent
-    val contentColor = if (selected) MaterialTheme.colorScheme.inverseOnSurface else MaterialTheme.colorScheme.onSurface
+    val background =  if (selected) MaterialTheme.colorScheme.primary else Color.Transparent
+    val contentColor = if (selected) MaterialTheme.colorScheme.onBackground else MaterialTheme.colorScheme.onSurface
 
     Box(
         modifier = Modifier
             .height(40.dp)
-            .clip(CircleShape)
+            .clip(RoundedCornerShape(16.dp))
             .background(background)
             .clickable(onClick = {
                 navController.navigate(screen.route) {

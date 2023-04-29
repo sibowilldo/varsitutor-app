@@ -82,7 +82,6 @@ fun DefaultButton(
         contentPadding = contentPadding
     ) {
         Text(text = buttonText.uppercase(),
-            color = textColor,
             style = TextStyle(
                 fontSize = 22.sp,
                 fontWeight = FontWeight.Medium)

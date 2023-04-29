@@ -34,4 +34,8 @@
     <string name="heading_getting_an_account">Getting an account</string>
     <string name="heading_fill_in_form_to_get_a_new_account">Fill in this form to get a new account</string>
     <string name="title_activity_compose">ComposeActivity</string>
+    <string name="additional_documents">Additional Documents</string>
+    <string name="resumes">Resumés</string>
+    <string name="heading_create_an_account">Create an Account</string>
+    <string name="incorrect_credentials">The provided credentials are incorrect.</string>
 </resources>

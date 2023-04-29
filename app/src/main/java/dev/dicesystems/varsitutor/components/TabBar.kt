@@ -3,7 +3,6 @@ package dev.dicesystems.varsitutor.components
 import androidx.compose.animation.core.animateDp
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.updateTransition
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
@@ -15,7 +14,6 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ScrollableTabRow
 import androidx.compose.material.Tab
@@ -30,17 +28,21 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
 import dev.dicesystems.varsitutor.screen.VacancyList
+import dev.dicesystems.varsitutor.viewmodels.MainViewModel
 
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun HomeTabBar(navController: NavController) {
+fun HomeTabBar(navController: NavController,
+               viewModel: MainViewModel
+) {
     val pagerState = rememberPagerState()
     val pages = listOf("ALL", "MY APPLICATIONS")
     val indicator = @Composable { tabPositions: List<TabPosition> ->
@@ -48,9 +50,11 @@ fun HomeTabBar(navController: NavController) {
     }
     Column() {
         ScrollableTabRow(
-            backgroundColor =  MaterialTheme.colorScheme.onBackground.copy(alpha = 0.04f),
-            modifier = Modifier.height(50.dp)
-                .border(BorderStroke(width=2.dp, color= MaterialTheme.colorScheme.background)).clip(shape = CircleShape),
+            backgroundColor = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.04f),
+            modifier = Modifier
+                .height(50.dp)
+                .clip(shape = RoundedCornerShape(16.dp))
+                .border(width = 2.dp, color = MaterialTheme.colorScheme.surface, shape = RoundedCornerShape(16.dp)),
             selectedTabIndex = pagerState.currentPage,
             indicator = indicator
         ) {
@@ -60,7 +64,7 @@ fun HomeTabBar(navController: NavController) {
                     modifier = Modifier.zIndex(6f),
                     text = { Text(text = title, color = MaterialTheme.colorScheme.onBackground) },
                     selected = pagerState.currentPage == index,
-                    onClick = {      },
+                    onClick = { },
                 )
             }
         }
@@ -73,7 +77,7 @@ fun HomeTabBar(navController: NavController) {
         ) { page ->
             when (page) {
                 0 -> {
-                    VacancyList(navController = navController)
+                    VacancyList(navController = navController, viewModel=viewModel)
                 }
 
                 1 -> {

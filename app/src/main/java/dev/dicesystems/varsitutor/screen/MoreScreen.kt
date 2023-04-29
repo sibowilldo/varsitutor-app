@@ -54,7 +54,7 @@ fun MoreScreen(navController: NavController) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GenerateSettings() {
-    Scaffold {
+    Scaffold(containerColor = MaterialTheme.colorScheme.surface) {
         Box(modifier = Modifier.padding(it), contentAlignment = Alignment.BottomCenter) {
             Column(
                 verticalArrangement = Arrangement.spacedBy(20.dp),

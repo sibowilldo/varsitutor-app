@@ -1,7 +1,9 @@
 package dev.dicesystems.varsitutor.screen
 
 import android.widget.Toast
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -20,6 +22,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Circle
 import androidx.compose.material.icons.rounded.FavoriteBorder
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -33,9 +36,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -44,50 +51,55 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
+import dev.dicesystems.varsitutor.R
 import dev.dicesystems.varsitutor.bottomnavigation.Screens
 import dev.dicesystems.varsitutor.components.HomeTabBar
 import dev.dicesystems.varsitutor.components.SearchBar
 import dev.dicesystems.varsitutor.data.models.VacancyModel
-import dev.dicesystems.varsitutor.viewmodels.VacancyListViewModel
+import dev.dicesystems.varsitutor.viewmodels.MainViewModel
+import kotlinx.coroutines.launch
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(navController: NavController) {
+fun HomeScreen(
+    navController: NavController,
+    viewModel: MainViewModel = hiltViewModel()
+) {
     Scaffold(
         topBar = {
             Column(modifier = Modifier.padding(24.dp)) {
-                SearchBar(modifier = Modifier.padding(vertical = 24.dp))
+                SearchBar(modifier = Modifier.padding(vertical = 8.dp))
                 Column(
                     modifier = Modifier
-                        .padding(top = 18.dp, bottom = 8.dp)
+                        .padding(top = 8.dp, bottom = 8.dp)
                         .fillMaxWidth(),
                     verticalArrangement = Arrangement.Bottom,
                     horizontalAlignment = Alignment.Start
                 ) {
-                    Text(
-                        text = "Vacancies",
-                        style = MaterialTheme.typography.headlineLarge,
-                        fontWeight = FontWeight.Light,
-                        textAlign = TextAlign.Left
-                    )
                 }
             }
 
-        },
+        }, containerColor = MaterialTheme.colorScheme.surface
     ) {
         Column(
             modifier = Modifier
                 .padding(it)
         ) {
-            StudentHomeScreen(navController = navController)
+
+            viewModel.doGetLoggedInUser(navController.context)
+            StudentHomeScreen(navController = navController, viewModel = viewModel)
         }
     }
 }
 
+@OptIn(ExperimentalPagerApi::class)
 @Composable
 fun StudentHomeScreen(
-    navController: NavController
+    navController: NavController,
+    viewModel: MainViewModel
 ) {
     Column(
         modifier = Modifier
@@ -96,32 +108,24 @@ fun StudentHomeScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
-        HomeTabBar(navController = navController)
+        HorizontalPager(count = 3, itemSpacing = 12.dp) {
+            Image(
+                contentScale = ContentScale.Fit,
+                painter = painterResource(id = R.drawable.accounting_and_informatics),
+                contentDescription = "",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(shape = RoundedCornerShape(18.dp))
+                    .height(200.dp)
+                    .padding(bottom = 18.dp)
+            )
+        }
+
+        HomeTabBar(navController = navController, viewModel = viewModel)
     }
 }
 
-@Composable
-fun TeacherHomeScreen() {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Text(text = "Teacher Home Screen")
-    }
-}
-
-@Composable
-fun HodHomeScreen() {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Text(text = "HOD Screen")
-    }
-}
-
+@OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun PreviewScreen() {
@@ -139,6 +143,7 @@ fun PreviewScreen() {
                     .height(120.dp)
                     .padding(bottom = 25.dp)
                     .clickable {
+
                     }
             )
             {
@@ -225,19 +230,31 @@ fun PreviewScreen() {
                         verticalArrangement = Arrangement.SpaceEvenly
                     ) {
                         val context = LocalContext.current
-                        IconButton(
-                            modifier = Modifier
-                                .size(36.dp)
-                                .weight(1F)
-                                .width(20.dp),
-                            onClick = {
-                                Toast.makeText(context, "Loved it!", Toast.LENGTH_LONG).show()
-                            }) {
-                            Icon(
-                                imageVector = Icons.Rounded.FavoriteBorder,
-                                contentDescription = "Heart Icon"
-                            )
+                        val scaffoldState = rememberScaffoldState()
+                        val coroutineScope = rememberCoroutineScope()
+
+                        Scaffold {
+                            IconButton(
+                                modifier = Modifier
+                                    .padding(it)
+                                    .size(36.dp)
+                                    .weight(1F)
+                                    .width(20.dp),
+                                onClick = {
+                                    coroutineScope.launch {
+                                        scaffoldState.snackbarHostState.showSnackbar(
+                                            message = "You liked it!",
+                                            actionLabel = "Close"
+                                        )
+                                    }
+                                }) {
+                                Icon(
+                                    imageVector = Icons.Rounded.FavoriteBorder,
+                                    contentDescription = "Heart Icon"
+                                )
+                            }
                         }
+
 
                         Text(
                             text = "vacancy.created_at.human",
@@ -261,15 +278,31 @@ fun PreviewScreen() {
 fun VacancyList(
     modifier: Modifier = Modifier,
     navController: NavController,
-    viewModel: VacancyListViewModel = hiltViewModel()
+    viewModel: MainViewModel
 ) {
     val vacancyList by remember { viewModel.vacancyList }
     val endReached by remember { viewModel.endReached }
     val loadError by remember { viewModel.loadError }
     val isLoading by remember { viewModel.isLoading }
 
+    LazyColumn(modifier = modifier, contentPadding = PaddingValues(top = 0.dp)) {
+        val itemsCount = vacancyList.size
+
+        items(itemsCount) {
+            if (it >= itemsCount - 1 && !endReached) {
+                viewModel.loadVacancyPaginatedList()
+            }
+            VacancyItem(
+                vacancy = vacancyList[it],
+                navController = navController,
+                viewModel = viewModel
+            )
+        }
+    }
+
     if (isLoading) {
         Column(
+            modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
@@ -281,28 +314,18 @@ fun VacancyList(
         }
     }
 
-    LazyColumn(modifier = modifier, contentPadding = PaddingValues(top = 0.dp)) {
-        val itemsCount = vacancyList.size
-
-        items(itemsCount) {
-            if (it >= itemsCount - 1 && !endReached) {
-                viewModel.loadVacancyPaginatedList()
-            }
-            VacancyItem(
-                vacancy = vacancyList[it],
-                navController = navController
-            )
-        }
-    }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun VacancyItem(
     vacancy: VacancyModel,
     navController: NavController,
     modifier: Modifier = Modifier,
-    viewModel: VacancyListViewModel = hiltViewModel()
+    viewModel: MainViewModel
 ) {
+
+    val responseMessage by remember { viewModel.responseMessage }
     Card(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.1f),
@@ -310,6 +333,11 @@ fun VacancyItem(
         modifier = Modifier
             .height(120.dp)
             .padding(bottom = 25.dp)
+            .border(
+                width = 1.dp,
+                shape = RoundedCornerShape(16.dp),
+                color = MaterialTheme.colorScheme.primary.copy(alpha = 0.4f)
+            )
             .clickable {
                 navController.navigate(
                     route = Screens.VacancyDetails.withArgs(
@@ -325,7 +353,7 @@ fun VacancyItem(
             horizontalArrangement = Arrangement.spacedBy(12.dp),
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-                .padding(8.dp)
+                .padding(vertical = 8.dp, horizontal = 12.dp)
                 .weight(1F),
 
             ) {
@@ -334,15 +362,25 @@ fun VacancyItem(
                 modifier = Modifier
                     .background(
                         shape = RoundedCornerShape(10.dp),
-                        color = listOf(MaterialTheme.colorScheme.background,
-                            MaterialTheme.colorScheme.primaryContainer,
-                            MaterialTheme.colorScheme.secondaryContainer,
-                            MaterialTheme.colorScheme.tertiaryContainer,
-                            ).random()
+                        color = listOf(
+                            MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
+                            MaterialTheme.colorScheme.secondary.copy(alpha = 0.2f),
+                            MaterialTheme.colorScheme.tertiary.copy(alpha = 0.2f),
+                            MaterialTheme.colorScheme.error.copy(alpha = 0.2f),
+                        ).random()
                     )
                     .size(60.dp)
             ) {
-                Text(text = "🧑‍💻", fontSize = 22.sp)
+                Text(
+                    text = listOf(
+                        "🧑‍💻",
+                        " 👩🏻‍⚖️",
+                        "\uD83E\uDDD1\uD83C\uDFFF\u200D\uD83C\uDF73",
+                        "\uD83D\uDC68\u200D\uD83D\uDD27",
+                        "\uD83D\uDC68\uD83C\uDFFB\u200D\uD83D\uDD2C",
+                        "\uD83D\uDC69\uD83C\uDFFF\u200D\uD83C\uDFA8"
+                    ).random(), fontSize = 22.sp
+                )
             }
             Column(
                 verticalArrangement = Arrangement.SpaceEvenly,
@@ -359,11 +397,15 @@ fun VacancyItem(
                         style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Black)
                     )
                     Text(
+                        color = MaterialTheme.colorScheme.primary,
                         text = vacancy.department,
                         modifier = Modifier,
                         overflow = TextOverflow.Ellipsis,
                         maxLines = 1,
-                        style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold)
+                        style = MaterialTheme.typography.titleSmall.copy(
+                            fontWeight = FontWeight.Medium,
+                            fontSize = 12.sp
+                        )
                     )
                 }
                 Row(
@@ -410,11 +452,12 @@ fun VacancyItem(
                 val context = LocalContext.current
                 IconButton(
                     modifier = Modifier
-                        .size(36.dp)
+                        .size(42.dp)
                         .weight(1F)
                         .width(20.dp),
                     onClick = {
-                        Toast.makeText(context, "Loved it!", Toast.LENGTH_LONG).show()
+                        viewModel.doToggleFavorite(vacancy.id)
+                        Toast.makeText(context, responseMessage.message, Toast.LENGTH_LONG).show()
                     }) {
                     Icon(
                         imageVector = Icons.Rounded.FavoriteBorder,
