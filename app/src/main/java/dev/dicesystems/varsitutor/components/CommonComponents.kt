@@ -1,6 +1,7 @@
 package dev.dicesystems.varsitutor.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -8,16 +9,20 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -71,33 +76,26 @@ fun SearchBar(
     hint: String = "",
     onSearch: (String) -> Unit = {}
 ) {
-    var text by remember { mutableStateOf("Search") }
-    var isHintDisplayed by remember { mutableStateOf(hint != "") }
-
-    Box(modifier = modifier) {
-        BasicTextField(
-            value = text,
-            onValueChange = {
-                text = it
-                onSearch(it)
-            },
-            maxLines = 1,
-            singleLine = true,
-            textStyle = TextStyle(color = MaterialTheme.colorScheme.background),
-            modifier = Modifier
-                    .fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.onBackground, CircleShape)
-                    .padding(horizontal = 20.dp, vertical = 12.dp)
-        )
-        if (isHintDisplayed) {
-            Text(
-                text = hint,
-                color = Color.LightGray,
-                modifier = Modifier
-                    .padding(horizontal = 20.dp, vertical = 12.dp)
-            )
-        }
-    }
+    var text by remember { mutableStateOf("") }
+    OutlinedTextField(
+        shape = RoundedCornerShape(16.dp),
+        value = text,
+        trailingIcon = {
+                       Icon(imageVector = Icons.Rounded.Search, contentDescription = "Search Icon")
+        },
+        placeholder = {
+                      Text(text = "Search")
+        },
+        onValueChange = {
+            text = it
+            onSearch(it)
+        },
+        maxLines = 1,
+        singleLine = true,
+        textStyle = TextStyle(color = MaterialTheme.colorScheme.background),
+        modifier = Modifier.fillMaxWidth(),
+        colors = TextFieldDefaults.colors(unfocusedIndicatorColor = MaterialTheme.colorScheme.surface)
+    )
 }
 
 @Composable

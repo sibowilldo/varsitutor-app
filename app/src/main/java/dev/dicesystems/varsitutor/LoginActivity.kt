@@ -1,8 +1,11 @@
 package dev.dicesystems.varsitutor
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color.rgb
 import android.os.Bundle
+import android.provider.Settings
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
@@ -35,10 +38,12 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -62,6 +67,8 @@ import dev.dicesystems.varsitutor.ui.theme.VarsitutorTheme
 import dev.dicesystems.varsitutor.util.PreferenceManager
 import dev.dicesystems.varsitutor.util.Resource
 import dev.dicesystems.varsitutor.viewmodels.MainViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
 class LoginActivity : ComponentActivity() {
@@ -99,12 +106,23 @@ fun CreateLoginScreen(
     scaffoldState: ScaffoldState
 ) {
     val mutableEmailAddress = remember { mutableStateOf("21429516@dut4life.ac.za") }
-    val mutablePassword = remember { mutableStateOf("5A6oO&9Z") }
-
+    val mutablePassword = remember { mutableStateOf("5A6oO&9") }
+    val mutableDeviceId = remember { mutableStateOf("device name not found") }
     val isLoading by remember { viewModel.isLoading }
     val loginState by viewModel.loginState.collectAsState()
 
     val context = LocalContext.current
+
+    LaunchedEffect(Unit) {
+        withContext(Dispatchers.IO) {
+            try {
+                mutableDeviceId.value =
+                    Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
+            } catch (e: Exception) {
+                Toast.makeText(context, e.message, Toast.LENGTH_LONG).show()
+            }
+        }
+    }
 
     Column(
         verticalArrangement = Arrangement.Top, modifier = Modifier
@@ -244,7 +262,7 @@ fun CreateLoginScreen(
                         context = context,
                         mutableEmailAddress.value,
                         mutablePassword.value,
-                        "random_string"
+                        mutableDeviceId.value
                     )
                 },
                 buttonText = "Sign In",

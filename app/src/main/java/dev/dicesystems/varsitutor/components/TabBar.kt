@@ -22,6 +22,7 @@ import androidx.compose.material.Text
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -34,8 +35,8 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
-import dev.dicesystems.varsitutor.screen.VacancyList
 import dev.dicesystems.varsitutor.viewmodels.MainViewModel
+import kotlinx.coroutines.launch
 
 
 @OptIn(ExperimentalPagerApi::class)
@@ -54,17 +55,26 @@ fun HomeTabBar(navController: NavController,
             modifier = Modifier
                 .height(50.dp)
                 .clip(shape = RoundedCornerShape(16.dp))
-                .border(width = 2.dp, color = MaterialTheme.colorScheme.surface, shape = RoundedCornerShape(16.dp)),
+                .border(
+                    width = 2.dp,
+                    color = MaterialTheme.colorScheme.surface,
+                    shape = RoundedCornerShape(16.dp)
+                ),
             selectedTabIndex = pagerState.currentPage,
             indicator = indicator
         ) {
 
+            val coroutineScope = rememberCoroutineScope()
             pages.forEachIndexed { index, title ->
                 Tab(
-                    modifier = Modifier.zIndex(6f),
+                    modifier = Modifier.zIndex(6f).clip(shape = RoundedCornerShape(16.dp)),
                     text = { Text(text = title, color = MaterialTheme.colorScheme.onBackground) },
                     selected = pagerState.currentPage == index,
-                    onClick = { },
+                    onClick = {
+                        coroutineScope.launch {
+                            pagerState.animateScrollToPage(index)
+                        }
+                    },
                 )
             }
         }
