@@ -315,8 +315,14 @@ fun VacancyItem(
                     route = Screens.VacancyDetails.withArgs(
                         vacancy.title,
                         vacancy.description,
-                        vacancy.department
-                    )
+                        vacancy.department,
+                        vacancy.category,
+                        vacancy.type,
+                        vacancy.user,
+                        vacancy.location,
+                        vacancy.expires_at.human,
+                        vacancy.created_at.human,
+                        )
                 )
             }
     )
