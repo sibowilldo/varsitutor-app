@@ -16,7 +16,7 @@ sealed class BottomBarScreen(
         icon_focused = R.drawable.ic_bottom_focused_menu
     )
 
-    // MHome
+    // Home
     object Home : BottomBarScreen(
         route = "home",
         title = "Home",

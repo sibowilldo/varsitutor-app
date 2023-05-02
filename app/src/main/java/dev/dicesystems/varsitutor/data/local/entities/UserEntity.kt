@@ -7,7 +7,8 @@ import dev.dicesystems.varsitutor.data.remote.responses.Joined
 
 @Entity(tableName = "User")
 data class UserEntity(
-    @PrimaryKey(autoGenerate = true) val id: Int? = 0,
+    @PrimaryKey
+    @ColumnInfo(name = "id") val id: Int,
     @ColumnInfo(name = "internal_id") val internalId: String,
     @ColumnInfo(name = "name") val name: String,
     @ColumnInfo(name = "given_name") val givenName: String,

@@ -67,7 +67,9 @@ fun HomeTabBar(navController: NavController,
             val coroutineScope = rememberCoroutineScope()
             pages.forEachIndexed { index, title ->
                 Tab(
-                    modifier = Modifier.zIndex(6f).clip(shape = RoundedCornerShape(16.dp)),
+                    modifier = Modifier
+                        .zIndex(6f)
+                        .clip(shape = RoundedCornerShape(16.dp)),
                     text = { Text(text = title, color = MaterialTheme.colorScheme.onBackground) },
                     selected = pagerState.currentPage == index,
                     onClick = {
@@ -91,7 +93,7 @@ fun HomeTabBar(navController: NavController,
                 }
 
                 1 -> {
-                    Text(text = "Applications")
+                    ApplicationList(navController = navController, viewModel = viewModel)
                 }
             }
         }

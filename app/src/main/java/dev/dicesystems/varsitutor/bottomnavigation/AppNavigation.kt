@@ -22,6 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -36,8 +37,7 @@ import androidx.navigation.compose.rememberNavController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AppNavigation() {
-    val navController = rememberNavController()
+fun AppNavigation( navController: NavHostController) {
     Scaffold(
         topBar = {
         },
@@ -64,19 +64,23 @@ fun BottomBar(
     val navStackBackEntry by navHostController.currentBackStackEntryAsState()
     val currentDestination = navStackBackEntry?.destination
 
-    Row(
-        modifier = Modifier
-            .padding(vertical = 8.dp, horizontal = 20.dp)
-            .background(MaterialTheme.colorScheme.background.copy(alpha = 0.5f))
+    Column(
+        modifier = Modifier.background(color = MaterialTheme.colorScheme.background)
             .fillMaxWidth(),
-        horizontalArrangement  = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ){
-        screens.forEach{screen ->
-            AddItem(
-                screen = screen,
-                currentDestination = currentDestination,
-                navController = navHostController)
+    ) {
+        Row(
+            modifier = Modifier
+                .padding(vertical = 12.dp, horizontal = 16.dp)
+                .fillMaxWidth(),
+            horizontalArrangement  = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ){
+            screens.forEach{screen ->
+                AddItem(
+                    screen = screen,
+                    currentDestination = currentDestination,
+                    navController = navHostController)
+            }
         }
     }
 }

@@ -39,6 +39,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
 import dev.dicesystems.varsitutor.R
 import dev.dicesystems.varsitutor.components.CustomTopAppBar
 import dev.dicesystems.varsitutor.viewmodels.MainViewModel
@@ -86,13 +87,12 @@ fun GenerateProfileScreen(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                Image(
+                AsyncImage(
                     modifier = Modifier
                         .clip(shape = CircleShape)
                         .size(58.dp),
-                    painter = painterResource(id = R.drawable.ic_launcher_background),
-                    contentDescription = ""
-                )
+                    model = "${userState?.profilePhotoUrl}", contentDescription = "")
+
                 Column() {
                     Text(
                         text = "${userState?.name}",

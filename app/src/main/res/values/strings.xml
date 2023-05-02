@@ -38,4 +38,6 @@
     <string name="resumes">Resumés</string>
     <string name="heading_create_an_account">Create an Account</string>
     <string name="incorrect_credentials">The provided credentials are incorrect.</string>
+    <string name="reset_password_helptext">We will send you a unique link to reset your password on this email address.</string>
+    <string name="title_activity_file_system_browser">FileSystemBrowser</string>
 </resources>

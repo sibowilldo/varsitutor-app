@@ -86,7 +86,6 @@ fun VacancyList(
 
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun VacancyItem(
     vacancy: VacancyModel,
@@ -111,9 +110,13 @@ fun VacancyItem(
             .clickable {
                 navController.navigate(
                     route = Screens.VacancyDetails.withArgs(
+                        vacancy.id.toString(),
                         vacancy.title,
                         vacancy.description,
-                        vacancy.department
+                        vacancy.department,
+                        vacancy.created_at.human,
+                        vacancy.expires_at.date_time,
+                        vacancy.location
                     )
                 )
             }

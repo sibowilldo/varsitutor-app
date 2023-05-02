@@ -78,6 +78,8 @@ object AppModule{
             appContext,
             AppDatabase::class.java,
             "varsitutor-db"
-        ).build()
+        )
+            .fallbackToDestructiveMigration()
+            .build()
     }
 }

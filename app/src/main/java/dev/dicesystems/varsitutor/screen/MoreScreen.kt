@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -19,9 +20,13 @@ import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
+import androidx.compose.material3.SheetState
+import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberBottomSheetScaffoldState
+import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -31,17 +36,48 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.ramcosta.composedestinations.navigation.clearBackStack
 import dev.dicesystems.varsitutor.LoginActivity
 import dev.dicesystems.varsitutor.R
+import dev.dicesystems.varsitutor.bottomnavigation.BottomBarScreen
 import dev.dicesystems.varsitutor.components.CustomTopAppBar
 import dev.dicesystems.varsitutor.components.DefaultButton
+import dev.dicesystems.varsitutor.components.ResetPasswordSheetContent
 import dev.dicesystems.varsitutor.util.PreferenceManager
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MoreScreen(navController: NavController) {
+    val bottomSheetState = rememberStandardBottomSheetState(
+        initialValue = SheetValue.Hidden,
+        skipHiddenState = false
+    )
+    val scaffoldState = rememberBottomSheetScaffoldState(
+        bottomSheetState = bottomSheetState
+    )
+    BottomSheetScaffold(
+        scaffoldState = scaffoldState,
+        sheetContent = {
+            ResetPasswordSheetContent(sheetState = bottomSheetState)
+        }
+    ) {
+        GenerateSettings(navController, bottomSheetState)
+    }
+}
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun GenerateSettings(
+    navController: NavController,
+    sheetState: SheetState
+) {
+    val context = navController.context
+    val preferenceManager = PreferenceManager(context)
+    val coroutineScope = rememberCoroutineScope()
+
     Scaffold(
+        containerColor = MaterialTheme.colorScheme.surface,
         topBar = {
             CustomTopAppBar(
                 navController = navController,
@@ -50,17 +86,6 @@ fun MoreScreen(navController: NavController) {
             )
         },
     ) {
-        Surface(modifier = Modifier.padding(it)) {
-            GenerateSettings(navController)
-        }
-    }
-}
-
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun GenerateSettings(navController: NavController) {
-    Scaffold(containerColor = MaterialTheme.colorScheme.surface) {
         Box(modifier = Modifier.padding(it), contentAlignment = Alignment.BottomCenter) {
             Column(
                 verticalArrangement = Arrangement.spacedBy(20.dp),
@@ -74,8 +99,6 @@ fun GenerateSettings(navController: NavController) {
             ) {
                 Box {
                     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                        val context = navController.context
-                        val preferenceManager = PreferenceManager(context)
                         Text(
                             text = "Account".uppercase(),
                             style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Black)
@@ -85,13 +108,24 @@ fun GenerateSettings(navController: NavController) {
                             style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Normal),
                             modifier = Modifier.clickable {
                                 preferenceManager.clearToken()
-                                navController.clearBackStack("more")
+
+                                navController.navigate(BottomBarScreen.More.route) {
+                                    popUpTo(navController.graph.id) {
+                                        inclusive = true
+                                    }
+                                }
                                 context.startActivity(Intent(context, LoginActivity::class.java))
                             }
                         )
                         Text(
                             text = "Reset Password".uppercase(),
-                            style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Normal)
+                            style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Normal),
+                            modifier = Modifier.clickable {
+                                coroutineScope.launch {
+                                    sheetState.expand()
+                                }
+                            }
+
                         )
                     }
                 }
@@ -177,7 +211,6 @@ fun GenerateSettings(navController: NavController) {
                 DefaultButton(
                     onClick = { /*TODO*/ },
                     buttonText = stringResource(id = R.string.button_delete_account),
-                    textColor = MaterialTheme.colorScheme.onErrorContainer,
                     colors = ButtonDefaults.buttonColors(
                         containerColor = MaterialTheme.colorScheme.error.copy(alpha = 0.5f)
                     )
@@ -185,10 +218,4 @@ fun GenerateSettings(navController: NavController) {
             }
         }
     }
-}
-
-@Preview
-@Composable
-fun PreviewSettings() {
-    GenerateSettings(navController = NavController(LocalContext.current))
 }

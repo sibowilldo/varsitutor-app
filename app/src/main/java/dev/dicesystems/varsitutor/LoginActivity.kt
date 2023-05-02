@@ -1,13 +1,16 @@
+@file:OptIn(ExperimentalMaterialApi::class)
+
 package dev.dicesystems.varsitutor
 
-import android.content.Context
 import android.content.Intent
 import android.graphics.Color.rgb
+import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -23,27 +26,31 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.ScaffoldState
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Email
 import androidx.compose.material.icons.rounded.Error
 import androidx.compose.material.icons.rounded.Password
-import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SheetState
+import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberBottomSheetScaffoldState
+import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -62,22 +69,38 @@ import dagger.hilt.android.AndroidEntryPoint
 import dev.dicesystems.varsitutor.components.AppVersion
 import dev.dicesystems.varsitutor.components.DefaultButton
 import dev.dicesystems.varsitutor.components.InputField
-import dev.dicesystems.varsitutor.data.sessions.UserSession
+import dev.dicesystems.varsitutor.components.ResetPasswordSheetContent
+import dev.dicesystems.varsitutor.data.models.LoginModel
 import dev.dicesystems.varsitutor.ui.theme.VarsitutorTheme
 import dev.dicesystems.varsitutor.util.PreferenceManager
 import dev.dicesystems.varsitutor.util.Resource
 import dev.dicesystems.varsitutor.viewmodels.MainViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+@OptIn(ExperimentalMaterial3Api::class)
 @AndroidEntryPoint
 class LoginActivity : ComponentActivity() {
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    @OptIn(ExperimentalMaterialApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            val bottomSheetState = rememberStandardBottomSheetState(
+                initialValue = SheetValue.Hidden,
+                skipHiddenState = false
+            )
+            val scaffoldState = rememberBottomSheetScaffoldState(
+                bottomSheetState = bottomSheetState
+            )
             LoginScreen() {
-                Scaffold() {
-                    val scaffoldState = rememberScaffoldState()
+                BottomSheetScaffold(
+                    scaffoldState = scaffoldState,
+                    sheetContent = {
+                        ResetPasswordSheetContent(sheetState = bottomSheetState)
+                    }
+                ) {
                     // A surface container using the 'background' color from the theme
                     Surface(
                         modifier = Modifier
@@ -85,7 +108,7 @@ class LoginActivity : ComponentActivity() {
                             .padding(it),
                         color = MaterialTheme.colorScheme.surface
                     ) {
-                        CreateLoginScreen(scaffoldState = scaffoldState)
+                        CreateLoginScreen(sheetState = bottomSheetState)
                     }
                 }
             }
@@ -100,10 +123,11 @@ fun LoginScreen(content: @Composable () -> Unit) {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateLoginScreen(
     viewModel: MainViewModel = hiltViewModel(),
-    scaffoldState: ScaffoldState
+    sheetState: SheetState
 ) {
     val mutableEmailAddress = remember { mutableStateOf("21429516@dut4life.ac.za") }
     val mutablePassword = remember { mutableStateOf("5A6oO&9") }
@@ -112,6 +136,7 @@ fun CreateLoginScreen(
     val loginState by viewModel.loginState.collectAsState()
 
     val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
         withContext(Dispatchers.IO) {
@@ -180,7 +205,6 @@ fun CreateLoginScreen(
                 val token = loginState.data?.token!!
                 val sharedPreferencesHelper = PreferenceManager(context)
                 sharedPreferencesHelper.saveToken(token)
-                UserSession(user = loginState.data?.user!!)
                 context.startActivity(Intent(context, MainActivity::class.java))
             }
 
@@ -259,10 +283,11 @@ fun CreateLoginScreen(
                 onClick =
                 {
                     viewModel.doLogin(
-                        context = context,
-                        mutableEmailAddress.value,
-                        mutablePassword.value,
-                        mutableDeviceId.value
+                        context = context, LoginModel(
+                            mutableEmailAddress.value,
+                            mutablePassword.value,
+                            mutableDeviceId.value
+                        )
                     )
                 },
                 buttonText = "Sign In",
@@ -280,7 +305,11 @@ fun CreateLoginScreen(
                     .padding(vertical = 16.dp, horizontal = 18.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                TextButton(onClick = { /*TODO*/ }) {
+                TextButton(onClick = {
+                    coroutineScope.launch {
+                        sheetState.expand()
+                    }
+                }) {
                     Text(
                         "Forgot Password",
                         color = Color.LightGray,
@@ -299,7 +328,6 @@ fun CreateLoginScreen(
                 }
             }
         }
-
         Row(
             modifier = Modifier
                 .fillMaxSize()
@@ -317,7 +345,6 @@ fun CreateLoginScreen(
 fun GreetingPreview2() {
     VarsitutorTheme {
         LoginScreen {
-//            CreateLoginScreen()
         }
     }
 }

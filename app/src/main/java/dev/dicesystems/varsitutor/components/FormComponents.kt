@@ -18,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -31,6 +32,7 @@ import androidx.compose.ui.unit.sp
 fun InputField(
     modifier: Modifier = Modifier,
     placeholder: @Composable() (() -> Unit)? = {},
+    suffix: @Composable() (() -> Unit)? = {},
     valueState: MutableState<String>,
     labelId: String,
     enabled: Boolean = true,
@@ -49,6 +51,7 @@ fun InputField(
         leadingIcon = leadingIcon,
         singleLine = isSingleLine,
         visualTransformation = visualTransformation,
+        suffix = suffix,
         textStyle = TextStyle(
             fontSize = 18.sp, color = MaterialTheme.colorScheme.onBackground
         ),
@@ -64,12 +67,13 @@ fun DefaultButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     buttonText: String,
-    textColor: Color = Color.DarkGray,
+    shape: Shape = RoundedCornerShape(18.dp),
     enabled: Boolean = true,
     colors: ButtonColors,
     elevation: ButtonElevation = ButtonDefaults.buttonElevation(0.dp),
     border: BorderStroke = BorderStroke(0.dp, Color.Transparent),
-    contentPadding: PaddingValues = PaddingValues(vertical = 16.dp, horizontal = 8.dp)
+    contentPadding: PaddingValues = PaddingValues(vertical = 16.dp, horizontal = 8.dp),
+    textStyle: TextStyle = TextStyle( fontSize = 22.sp, fontWeight = FontWeight.Medium)
 ) {
     Button(
         onClick = onClick,
@@ -78,13 +82,9 @@ fun DefaultButton(
         colors = colors,
         elevation = elevation,
         border = border,
-        shape = RoundedCornerShape(18.dp),
+        shape = shape,
         contentPadding = contentPadding
     ) {
-        Text(text = buttonText.uppercase(),
-            style = TextStyle(
-                fontSize = 22.sp,
-                fontWeight = FontWeight.Medium)
-        )
+        Text(text = buttonText.uppercase(), style = textStyle)
     }
 }

@@ -1,5 +1,6 @@
 package dev.dicesystems.varsitutor.screen
 
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -45,6 +46,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.airbnb.lottie.LottieAnimationView
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
@@ -81,8 +83,6 @@ fun HomeScreen(
             modifier = Modifier
                 .padding(it)
         ) {
-
-//            viewModel.doGetLoggedInUser(navController.context)
             StudentHomeScreen(navController = navController, viewModel = viewModel)
         }
     }
@@ -152,6 +152,7 @@ fun FacultyCard(faculty: Faculties) {
                 Column() {
                     Text(text = "Faculty of".uppercase())
                     Text(
+                        color = faculty.brandColor,
                         text = faculty.facultyName,
                         style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Black)
                     )
@@ -314,8 +315,6 @@ fun PreviewScreen() {
                                 )
                             }
                         }
-
-
                         Text(
                             text = "vacancy.created_at.human",
                             maxLines = 1,
@@ -327,9 +326,13 @@ fun PreviewScreen() {
                     }
                 }
             }
-
-
         }
+    }
+}
+
+@Composable
+fun MyApplications(context: Context) {
+    Column(){
 
     }
 }
